@@ -1,14 +1,15 @@
 package com.lhduc.restaurantmanagementapi.service;
 
-import com.lhduc.restaurantmanagementapi.dto.request.MenuItemCreateRequest;
-import com.lhduc.restaurantmanagementapi.dto.request.MenuItemUpdateRequest;
-import com.lhduc.restaurantmanagementapi.dto.response.MenuItemDto;
-import org.springframework.data.domain.Pageable;
+import com.lhduc.restaurantmanagementapi.model.dto.request.MenuItemCreateRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.request.MenuItemUpdateRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.request.PaginationRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.request.sort.SortRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.response.MenuItemDto;
 
 import java.util.List;
 
 public interface MenuItemService {
-    List<MenuItemDto> getAll(Pageable pageable);
+    List<MenuItemDto> getAll(PaginationRequest paginationRequest, SortRequest sortRequest);
 
     MenuItemDto getById(int id);
 

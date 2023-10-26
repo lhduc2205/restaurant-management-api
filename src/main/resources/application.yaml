@@ -1,8 +1,11 @@
+logging:
+  level:
+    root: info
 spring:
   datasource:
     url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/restaurant-db
-    username: lhduc
-    password: 2205
+    username: 'postgres'
+    password: '@3563949Zx'
   jpa:
     show-sql: true
     hibernate:
@@ -10,5 +13,5 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
+#        format_sql: true
 

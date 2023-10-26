@@ -1,16 +1,20 @@
 package com.lhduc.restaurantmanagementapi.service.impl;
 
-import com.lhduc.restaurantmanagementapi.common.mappers.MenuItemCreateRequestMapper;
-import com.lhduc.restaurantmanagementapi.dto.request.MenuItemCreateRequest;
-import com.lhduc.restaurantmanagementapi.dto.request.MenuItemUpdateRequest;
-import com.lhduc.restaurantmanagementapi.dto.response.MenuItemDto;
-import com.lhduc.restaurantmanagementapi.entity.MenuItem;
+import com.lhduc.restaurantmanagementapi.model.mappers.MenuItemCreateRequestMapper;
+import com.lhduc.restaurantmanagementapi.model.dto.request.MenuItemCreateRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.request.MenuItemUpdateRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.request.PaginationRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.request.sort.SortRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.response.MenuItemDto;
+import com.lhduc.restaurantmanagementapi.model.entity.MenuItem;
 import com.lhduc.restaurantmanagementapi.repository.MenuItemRepository;
 import com.lhduc.restaurantmanagementapi.service.MenuItemService;
-import com.lhduc.restaurantmanagementapi.common.mappers.MenuItemMapper;
+import com.lhduc.restaurantmanagementapi.model.mappers.MenuItemMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,12 +23,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MenuItemServiceImpl implements MenuItemService {
     private final MenuItemRepository menuItemRepository;
-    private final MenuItemMapper menuItemMapper = MenuItemMapper.INSTANCE;
-    private final MenuItemCreateRequestMapper menuItemCreateRequestMapper = MenuItemCreateRequestMapper.INSTANCE;
+    private final MenuItemMapper menuItemMapper;
+    private final MenuItemCreateRequestMapper menuItemCreateRequestMapper;
 
     @Override
-    public List<MenuItemDto> getAll(Pageable pageable) {
-        Page<MenuItem> menuItemPage = menuItemRepository.findAll(pageable);
+    public List<MenuItemDto> getAll(PaginationRequest paginationRequest, SortRequest sortRequest) {
+        Pageable pageRequest = PageRequest.of(paginationRequest.getOffset(), paginationRequest.getLimit(), Sort.by(sortRequest.extractSortOrder()));
+
+        Page<MenuItem> menuItemPage = menuItemRepository.findAll(pageRequest);
         List<MenuItem> menuItems = menuItemPage.getContent();
         return menuItemMapper.convertToDto(menuItems);
     }

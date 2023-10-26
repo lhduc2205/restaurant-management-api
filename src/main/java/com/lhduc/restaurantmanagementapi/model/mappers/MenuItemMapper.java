@@ -1,17 +1,15 @@
-package com.lhduc.restaurantmanagementapi.common.mappers;
+package com.lhduc.restaurantmanagementapi.model.mappers;
 
-import com.lhduc.restaurantmanagementapi.dto.response.MenuItemDto;
-import com.lhduc.restaurantmanagementapi.entity.MenuItem;
+import com.lhduc.restaurantmanagementapi.model.dto.response.MenuItemDto;
+import com.lhduc.restaurantmanagementapi.model.entity.MenuItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import java.util.Collection;
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface MenuItemMapper extends BaseMapper<MenuItemDto, MenuItem> {
-    MenuItemMapper INSTANCE = Mappers.getMapper(MenuItemMapper.class);
-
     @Override
     MenuItemDto convertToDto(MenuItem menuItem);
 

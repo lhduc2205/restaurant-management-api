@@ -1,4 +1,4 @@
-package com.lhduc.restaurantmanagementapi.common.mappers;
+package com.lhduc.restaurantmanagementapi.model.mappers;
 
 import java.util.Collection;
 

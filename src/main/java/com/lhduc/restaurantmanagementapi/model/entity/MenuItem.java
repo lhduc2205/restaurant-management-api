@@ -1,4 +1,4 @@
-package com.lhduc.restaurantmanagementapi.entity;
+package com.lhduc.restaurantmanagementapi.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
