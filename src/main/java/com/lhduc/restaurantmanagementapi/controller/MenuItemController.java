@@ -1,14 +1,13 @@
 package com.lhduc.restaurantmanagementapi.controller;
 
-import com.lhduc.restaurantmanagementapi.model.dto.request.MenuItemCreateRequest;
-import com.lhduc.restaurantmanagementapi.model.dto.request.MenuItemUpdateRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemCreateRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemUpdateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.PaginationRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.sort.MenuItemSort;
 import com.lhduc.restaurantmanagementapi.model.dto.response.MenuItemDto;
 import com.lhduc.restaurantmanagementapi.model.dto.response.SuccessResponse;
 import com.lhduc.restaurantmanagementapi.service.MenuItemService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

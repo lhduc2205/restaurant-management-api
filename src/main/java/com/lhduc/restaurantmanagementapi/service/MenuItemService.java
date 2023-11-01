@@ -1,7 +1,7 @@
 package com.lhduc.restaurantmanagementapi.service;
 
-import com.lhduc.restaurantmanagementapi.model.dto.request.MenuItemCreateRequest;
-import com.lhduc.restaurantmanagementapi.model.dto.request.MenuItemUpdateRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemCreateRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemUpdateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.PaginationRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.sort.SortRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.response.MenuItemDto;

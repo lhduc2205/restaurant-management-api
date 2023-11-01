@@ -1,8 +1,9 @@
 package com.lhduc.restaurantmanagementapi.service.impl;
 
-import com.lhduc.restaurantmanagementapi.model.mappers.MenuItemCreateRequestMapper;
-import com.lhduc.restaurantmanagementapi.model.dto.request.MenuItemCreateRequest;
-import com.lhduc.restaurantmanagementapi.model.dto.request.MenuItemUpdateRequest;
+import com.lhduc.restaurantmanagementapi.common.constant.MessageConstant;
+import com.lhduc.restaurantmanagementapi.exception.NotFoundException;
+import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemCreateRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemUpdateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.PaginationRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.sort.SortRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.response.MenuItemDto;
@@ -24,7 +25,6 @@ import java.util.List;
 public class MenuItemServiceImpl implements MenuItemService {
     private final MenuItemRepository menuItemRepository;
     private final MenuItemMapper menuItemMapper;
-    private final MenuItemCreateRequestMapper menuItemCreateRequestMapper;
 
     @Override
     public List<MenuItemDto> getAll(PaginationRequest paginationRequest, SortRequest sortRequest) {
@@ -37,20 +37,20 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public MenuItemDto getById(int id) {
-        MenuItem menuItem = getExistedMenuItem(id);
+        MenuItem menuItem = this.getExistedMenuItem(id);
 
         return menuItemMapper.convertToDto(menuItem);
     }
 
     @Override
     public void create(MenuItemCreateRequest request) {
-        MenuItem menuItem = menuItemCreateRequestMapper.convertToEntity(request);
+        MenuItem menuItem = menuItemMapper.convertToEntityFromRequest(request);
         menuItemRepository.save(menuItem);
     }
 
     @Override
     public void update(int id, MenuItemUpdateRequest request) {
-        MenuItem menuItem = getExistedMenuItem(id);
+        MenuItem menuItem = this.getExistedMenuItem(id);
 
         menuItem.setName(request.getName());
         menuItem.setPrice(request.getPrice());
@@ -59,13 +59,13 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public void deleteById(int id) {
-        MenuItem menuItem = getExistedMenuItem(id);
+        MenuItem menuItem = this.getExistedMenuItem(id);
         menuItemRepository.delete(menuItem);
     }
 
     private MenuItem getExistedMenuItem(int id) {
-        return menuItemRepository.findById(id).orElseThrow();
+        return menuItemRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException(MessageConstant.MENU_ITEM_NOT_FOUND));
     }
-
-
 }

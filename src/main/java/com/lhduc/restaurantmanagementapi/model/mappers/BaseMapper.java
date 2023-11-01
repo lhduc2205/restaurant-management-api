@@ -1,13 +1,13 @@
 package com.lhduc.restaurantmanagementapi.model.mappers;
 
-import java.util.Collection;
+import java.util.List;
 
-public interface BaseMapper<DTO, ENTITY> {
-    DTO convertToDto(ENTITY entity);
+/**
+ * @param <D> meaning Dto
+ * @param <E> meaning Entity
+ */
+public interface BaseMapper<D, E> {
+    D convertToDto(E entity);
 
-    Collection<DTO> convertToDto(Collection<ENTITY> entity);
-
-    ENTITY convertToEntity(DTO dto);
-
-    Collection<ENTITY> convertToEntity(Collection<DTO> dto);
+    List<D> convertToDto(List<E> entity);
 }

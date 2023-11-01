@@ -8,11 +8,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
-    @ExceptionHandler(Throwable.class)
-    public ResponseEntity<ErrorResponse> handleGlobalException(Throwable throwable) {
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponse> handleGlobalException(RuntimeException exception) {
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(throwable.getMessage());
+        errorResponse.setMessage(exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }

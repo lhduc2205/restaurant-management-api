@@ -1,12 +1,16 @@
 package com.lhduc.restaurantmanagementapi.model.entity;
 
+import com.lhduc.restaurantmanagementapi.common.enums.PaymentStatus;
+import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillUpdateRequest;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,18 +21,15 @@ import java.util.List;
 
 @Getter
 @Setter
-@Entity(name = "menu_items")
-public class MenuItem {
+@Entity(name = "bills")
+public class Bill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
-    private String name;
-
-    @Min(1)
-    @Column(nullable = false)
-    private double price;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_status", nullable = false)
+    private PaymentStatus paymentStatus = PaymentStatus.UNPAID;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -38,6 +39,10 @@ public class MenuItem {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "menuItem")
-    private List<BillDetail> billDetail;
+    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
+    private List<BillDetail> billDetails;
+
+    public void update(BillUpdateRequest billUpdateRequest) {
+        this.paymentStatus = billUpdateRequest.getPaymentStatus();
+    }
 }

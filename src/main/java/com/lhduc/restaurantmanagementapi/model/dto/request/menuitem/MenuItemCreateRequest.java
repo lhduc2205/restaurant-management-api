@@ -1,4 +1,4 @@
-package com.lhduc.restaurantmanagementapi.model.dto.request;
+package com.lhduc.restaurantmanagementapi.model.dto.request.menuitem;
 
 import lombok.Getter;
 import lombok.Setter;
