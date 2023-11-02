@@ -1,9 +1,11 @@
 package com.lhduc.restaurantmanagementapi.controller;
 
+import com.lhduc.restaurantmanagementapi.model.dto.request.bill.AddMoreItemToBillRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillCreateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillDetailCreateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.PaginationRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillDetailUpdateRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillFilter;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillUpdateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.sort.BillSort;
 import com.lhduc.restaurantmanagementapi.model.dto.response.BillDto;
@@ -13,6 +15,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,10 +40,11 @@ public class BillController {
 
     @GetMapping
     public ResponseEntity<SuccessResponse<List<BillDto>>> getAll(
+            BillFilter billFilter,
             @Valid PaginationRequest paginationRequest,
             @Valid BillSort sort
     ) {
-        List<BillDto> bills = billService.getAllBill(paginationRequest, sort);
+        List<BillDto> bills = billService.getAllBill(billFilter, paginationRequest, sort);
         return ResponseEntity.ok(SuccessResponse.of(bills, GET_ALL_BILL_SUCCESSFULLY));
     }
 
@@ -51,18 +55,18 @@ public class BillController {
     }
 
     @PostMapping
-    public ResponseEntity<URI> createBill(@RequestBody BillCreateRequest billRequest) {
+    public ResponseEntity<URI> createBill(@RequestBody @Valid BillCreateRequest billRequest) {
         billService.createBill(billRequest);
 
         return ResponseEntity.created(URI.create(BILLS_ENDPOINT + "/" + 1)).build();
     }
 
-    @PostMapping("{billId}/details")
-    public ResponseEntity<URI> addMoreBillDetails(
+    @PostMapping("{billId}/items")
+    public ResponseEntity<URI> addMoreBillItems(
             @PathVariable("billId") int billId,
-            @RequestBody List<BillDetailCreateRequest> billDetailsRequest
+            @RequestBody @Valid AddMoreItemToBillRequest billDetailsRequest
     ) {
-        billService.addMoreBillDetails(billId, billDetailsRequest);
+        billService.addMoreBillItems(billId, billDetailsRequest.getItems());
 
         return ResponseEntity.created(URI.create(BILLS_ENDPOINT)).build();
     }
@@ -70,19 +74,19 @@ public class BillController {
     @PutMapping("{billId}")
     public ResponseEntity<Void> updateBill(
             @PathVariable("billId") int billId,
-            @Valid @RequestBody BillUpdateRequest billUpdateRequest
+            @RequestBody @Valid BillUpdateRequest billUpdateRequest
     ) {
         billService.updateBill(billId, billUpdateRequest);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PutMapping("{billId}/details")
-    public ResponseEntity<Void> updateBillDetails(
+    @PutMapping("{billId}/items")
+    public ResponseEntity<Void> updateBillItems(
             @PathVariable("billId") int billId,
-            @Valid @RequestBody List<BillDetailUpdateRequest> billDetailUpdateRequest
+            @RequestBody @Valid List<BillDetailUpdateRequest> billDetailUpdateRequest
     ) {
-        billService.updateBillDetails(billId, billDetailUpdateRequest);
+        billService.updateBillItems(billId, billDetailUpdateRequest);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -93,12 +97,12 @@ public class BillController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @DeleteMapping("{billId}/details/menu-items/{menuItemId}")
-    public ResponseEntity<Void> deleteBillDetail(
+    @DeleteMapping("{billId}/items/{menuItemId}")
+    public ResponseEntity<Void> deleteBillItem(
             @PathVariable("billId") int billId,
             @PathVariable("menuItemId") int menuItemId
     ) {
-        billService.deleteBillDetail(billId, menuItemId);
+        billService.deleteBillItem(billId, menuItemId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

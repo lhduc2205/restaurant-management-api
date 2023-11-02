@@ -19,11 +19,11 @@ public class BillDetail {
     private BillDetailPK id;
 
     @Column(nullable = false)
-    private int quantity;
+    private Integer quantity;
 
     @Min(1)
     @Column(nullable = false)
-    private double pricePerUnit;
+    private Double pricePerUnit;
 
     private String description;
 

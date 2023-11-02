@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.PAYMENT_STATUS_CAN_NOT_BE_EMPTY;
@@ -15,5 +16,5 @@ public class BillUpdateRequest {
     @NotNull(message = PAYMENT_STATUS_CAN_NOT_BE_EMPTY)
     private PaymentStatus paymentStatus;
 
-    private List<BillDetailUpdateRequest> details;
+    private List<BillDetailUpdateRequest> details = new ArrayList<>();
 }

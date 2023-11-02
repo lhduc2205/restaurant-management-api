@@ -2,7 +2,9 @@ package com.lhduc.restaurantmanagementapi.service.impl;
 
 import com.lhduc.restaurantmanagementapi.common.constant.MessageConstant;
 import com.lhduc.restaurantmanagementapi.exception.NotFoundException;
+import com.lhduc.restaurantmanagementapi.exception.OperationForbiddenException;
 import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemCreateRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemFilter;
 import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemUpdateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.PaginationRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.sort.SortRequest;
@@ -12,6 +14,7 @@ import com.lhduc.restaurantmanagementapi.repository.MenuItemRepository;
 import com.lhduc.restaurantmanagementapi.service.MenuItemService;
 import com.lhduc.restaurantmanagementapi.model.mappers.MenuItemMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +23,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.UNABLE_TO_DELETE_MENU_ITEM;
+
 @Service
 @RequiredArgsConstructor
 public class MenuItemServiceImpl implements MenuItemService {
@@ -27,12 +32,12 @@ public class MenuItemServiceImpl implements MenuItemService {
     private final MenuItemMapper menuItemMapper;
 
     @Override
-    public List<MenuItemDto> getAll(PaginationRequest paginationRequest, SortRequest sortRequest) {
+    public List<MenuItemDto> getAll(MenuItemFilter menuItemFilter, PaginationRequest paginationRequest, SortRequest sortRequest) {
         Pageable pageRequest = PageRequest.of(paginationRequest.getOffset(), paginationRequest.getLimit(), Sort.by(sortRequest.extractSortOrder()));
+        MenuItem probe = menuItemMapper.convertToEntityFromFilter(menuItemFilter);
 
-        Page<MenuItem> menuItemPage = menuItemRepository.findAll(pageRequest);
-        List<MenuItem> menuItems = menuItemPage.getContent();
-        return menuItemMapper.convertToDto(menuItems);
+        Page<MenuItem> menuItemPage = menuItemRepository.findAll(Example.of(probe), pageRequest);
+        return menuItemMapper.convertToDto(menuItemPage.getContent());
     }
 
     @Override
@@ -59,8 +64,7 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public void deleteById(int id) {
-        MenuItem menuItem = this.getExistedMenuItem(id);
-        menuItemRepository.delete(menuItem);
+        throw new OperationForbiddenException(UNABLE_TO_DELETE_MENU_ITEM);
     }
 
     private MenuItem getExistedMenuItem(int id) {

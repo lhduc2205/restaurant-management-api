@@ -1,6 +1,7 @@
 package com.lhduc.restaurantmanagementapi.service;
 
 import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemCreateRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemFilter;
 import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemUpdateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.PaginationRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.sort.SortRequest;
@@ -9,7 +10,7 @@ import com.lhduc.restaurantmanagementapi.model.dto.response.MenuItemDto;
 import java.util.List;
 
 public interface MenuItemService {
-    List<MenuItemDto> getAll(PaginationRequest paginationRequest, SortRequest sortRequest);
+    List<MenuItemDto> getAll(MenuItemFilter menuItemFilter, PaginationRequest paginationRequest, SortRequest sortRequest);
 
     MenuItemDto getById(int id);
 

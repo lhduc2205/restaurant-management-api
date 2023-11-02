@@ -4,13 +4,11 @@ import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
-public class BillCreateRequest {
-
+public class AddMoreItemToBillRequest {
     @Valid
-    private List<BillDetailCreateRequest> items = new ArrayList<>();
+    private List<BillDetailCreateRequest> items;
 }

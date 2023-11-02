@@ -1,6 +1,7 @@
 package com.lhduc.restaurantmanagementapi.controller;
 
 import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemCreateRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemFilter;
 import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemUpdateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.PaginationRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.sort.MenuItemSort;
@@ -33,10 +34,12 @@ public class MenuItemController {
 
     @GetMapping
     public ResponseEntity<SuccessResponse<List<MenuItemDto>>> getAll(
+            @Valid MenuItemFilter menuItemFilter,
             @Valid PaginationRequest paginationRequest,
             @Valid MenuItemSort sort
     ) {
-        List<MenuItemDto> menuItems = menuItemService.getAll(paginationRequest, sort);
+        List<MenuItemDto> menuItems = menuItemService.getAll(menuItemFilter, paginationRequest, sort);
+
         return ResponseEntity.ok(SuccessResponse.of(menuItems, GET_ALL_MENU_ITEM_SUCCESSFULLY));
     }
 
@@ -47,13 +50,13 @@ public class MenuItemController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody MenuItemCreateRequest request) {
+    public ResponseEntity<Void> create(@RequestBody @Valid MenuItemCreateRequest request) {
         menuItemService.create(request);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("{id}")
-    public void update(@PathVariable int id, @RequestBody MenuItemUpdateRequest request) {
+    public void update(@PathVariable int id, @RequestBody @Valid MenuItemUpdateRequest request) {
         menuItemService.update(id, request);
     }
 

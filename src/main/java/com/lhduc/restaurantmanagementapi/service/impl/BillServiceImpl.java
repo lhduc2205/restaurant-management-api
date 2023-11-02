@@ -6,6 +6,7 @@ import com.lhduc.restaurantmanagementapi.exception.OperationForbiddenException;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillCreateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillDetailCreateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillDetailUpdateRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillFilter;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillUpdateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.PaginationRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.sort.SortRequest;
@@ -20,6 +21,8 @@ import com.lhduc.restaurantmanagementapi.repository.BillRepository;
 import com.lhduc.restaurantmanagementapi.repository.MenuItemRepository;
 import com.lhduc.restaurantmanagementapi.service.BillService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -37,11 +40,12 @@ public class BillServiceImpl implements BillService {
     private final BillMapper billMapper;
 
     @Override
-    public List<BillDto> getAllBill(PaginationRequest paginationRequest, SortRequest sortRequest) {
+    public List<BillDto> getAllBill(BillFilter billFilter, PaginationRequest paginationRequest, SortRequest sortRequest) {
         Pageable pageRequest = PageRequest.of(paginationRequest.getOffset(), paginationRequest.getLimit(), Sort.by(sortRequest.extractSortOrder()));
-        List<Bill> bills = billRepository.findAll(pageRequest).getContent();
+        Bill probe = billMapper.convertToEntityFromFilter(billFilter);
 
-        return billMapper.convertToDto(bills);
+        Page<Bill> billPage = billRepository.findAll(Example.of(probe), pageRequest);
+        return billMapper.convertToDto(billPage.getContent());
     }
 
     @Override
@@ -54,14 +58,14 @@ public class BillServiceImpl implements BillService {
     @Override
     public void createBill(BillCreateRequest billRequest) {
         Bill bill = new Bill();
-        List<BillDetail> billDetailsToCreate = this.createBillDetailsForBill(bill, billRequest.getDetails());
+        List<BillDetail> billDetailsToCreate = this.createBillDetailsForBill(bill, billRequest.getItems());
         bill.setBillDetails(billDetailsToCreate);
 
         billRepository.save(bill);
     }
 
     @Override
-    public void addMoreBillDetails(int billId, List<BillDetailCreateRequest> billDetailsRequest) {
+    public void addMoreBillItems(int billId, List<BillDetailCreateRequest> billDetailsRequest) {
         Bill bill = this.getExistedBill(billId);
         this.ensureBillIsEditable(bill);
         this.handleCreateOrUpdateBillDetailsFromRequest(bill, billDetailsRequest);
@@ -83,7 +87,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public void updateBillDetails(int billId, List<BillDetailUpdateRequest> billDetailsRequest) {
+    public void updateBillItems(int billId, List<BillDetailUpdateRequest> billDetailsRequest) {
         Bill bill = this.getExistedBill(billId);
         this.ensureBillIsEditable(bill);
         List<BillDetail> billDetailsToUpdate = new ArrayList<>();
@@ -107,8 +111,9 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public void deleteBillDetail(int billId, int menuItem) {
-
+    public void deleteBillItem(int billId, int menuItem) {
+        BillDetail billDetail = getExistedBillDetail(billId, menuItem);
+        billDetailRepository.delete(billDetail);
     }
 
     private void handleCreateOrUpdateBillDetailsFromRequest(Bill bill, List<BillDetailCreateRequest> request) {

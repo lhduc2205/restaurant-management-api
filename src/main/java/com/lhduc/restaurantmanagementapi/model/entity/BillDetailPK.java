@@ -14,8 +14,8 @@ import java.io.Serializable;
 @Embeddable
 public class BillDetailPK implements Serializable {
     @Column(name = "bill_id")
-    private int billId;
+    private Integer billId;
 
     @Column(name = "menu_item_id")
-    private int menuItemId;
+    private Integer menuItemId;
 }

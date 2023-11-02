@@ -12,4 +12,7 @@ public class MessageConstant {
     public static final String MENU_ITEM_NOT_FOUND = "Menu item not found";
     public static final String BILL_DETAIL_NOT_FOUND = "Bill detail not found";
     public static final String FAILED = "Failed";
+    public static final String UNABLE_TO_DELETE_MENU_ITEM = "Unable to delete menu item";
+    public static final String QUANTITY_MUST_BE_AT_LEAST_1 = "Quantity must be at least 1";
+    public static final String PRICE_MUST_BE_AT_LEAST_1 = "Price must be at least 1";
 }
