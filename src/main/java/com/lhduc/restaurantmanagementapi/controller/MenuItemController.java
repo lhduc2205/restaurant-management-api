@@ -4,7 +4,7 @@ import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemCrea
 import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemFilter;
 import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemUpdateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.PaginationRequest;
-import com.lhduc.restaurantmanagementapi.model.dto.request.sort.MenuItemSort;
+import com.lhduc.restaurantmanagementapi.model.dto.request.sort.MenuItemSortRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.response.MenuItemDto;
 import com.lhduc.restaurantmanagementapi.model.dto.response.SuccessResponse;
 import com.lhduc.restaurantmanagementapi.service.MenuItemService;
@@ -36,7 +36,7 @@ public class MenuItemController {
     public ResponseEntity<SuccessResponse<List<MenuItemDto>>> getAll(
             @Valid MenuItemFilter menuItemFilter,
             @Valid PaginationRequest paginationRequest,
-            @Valid MenuItemSort sort
+            @Valid MenuItemSortRequest sort
     ) {
         List<MenuItemDto> menuItems = menuItemService.getAll(menuItemFilter, paginationRequest, sort);
 

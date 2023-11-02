@@ -33,7 +33,7 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public List<MenuItemDto> getAll(MenuItemFilter menuItemFilter, PaginationRequest paginationRequest, SortRequest sortRequest) {
-        Pageable pageRequest = PageRequest.of(paginationRequest.getOffset(), paginationRequest.getLimit(), Sort.by(sortRequest.extractSortOrder()));
+        Pageable pageRequest = PageRequest.of(paginationRequest.getOffset(), paginationRequest.getLimit(), Sort.by(sortRequest.buildSortOrders()));
         MenuItem probe = menuItemMapper.convertToEntityFromFilter(menuItemFilter);
 
         Page<MenuItem> menuItemPage = menuItemRepository.findAll(Example.of(probe), pageRequest);

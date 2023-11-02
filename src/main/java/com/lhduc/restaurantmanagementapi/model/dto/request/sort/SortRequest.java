@@ -10,44 +10,44 @@ import java.util.List;
 @Getter
 @Setter
 public class SortRequest {
-    private static final String FIELD_SEPARATOR = ",";
-    private static final String DESC_SIGN = "-";
+    private static final String SORT_FIELD_SEPARATOR = ",";
+    private static final String DESCENDING_SIGN = "-";
 
-    List<SortItem> sortItems = new ArrayList<>();
+    List<SortableField> sortableFields = new ArrayList<>();
 
-    public void splitSortToFields(String sortString) {
-        String[] sortFields = sortString.split(FIELD_SEPARATOR);
+    public void parseSortString(String sortString) {
+        String[] sortFields = sortString.split(SORT_FIELD_SEPARATOR);
 
         for (String sortField : sortFields) {
             if (sortField.isBlank()) {
                 continue;
             }
 
-            SortItem sortItem = new SortItem();
+            SortableField sortableField = new SortableField();
 
-            if (sortField.startsWith(DESC_SIGN)) {
-                sortItem.setSortType(Sort.Direction.DESC);
-                sortItem.setSortField(sortField.split(DESC_SIGN)[1]);
+            if (sortField.startsWith(DESCENDING_SIGN)) {
+                sortableField.setSortDirection(Sort.Direction.DESC);
+                sortableField.setFieldName(sortField.split(DESCENDING_SIGN)[1]);
             } else {
-                sortItem.setSortType(Sort.Direction.ASC);
-                sortItem.setSortField(removeWeirdChar(sortField));
+                sortableField.setSortDirection(Sort.Direction.ASC);
+                sortableField.setFieldName(normalizeFieldName(sortField));
             }
 
-            sortItems.add(sortItem);
+            sortableFields.add(sortableField);
         }
     }
 
-    public List<Sort.Order> extractSortOrder() {
+    public List<Sort.Order> buildSortOrders() {
         List<Sort.Order> sortOrders = new ArrayList<>();
 
-        for (SortItem sortItem : sortItems) {
-            sortOrders.add(new Sort.Order(sortItem.getSortType(), sortItem.getSortField()));
+        for (SortableField sortableField : sortableFields) {
+            sortOrders.add(new Sort.Order(sortableField.getSortDirection(), sortableField.getFieldName()));
         }
 
         return sortOrders;
     }
 
-    private String removeWeirdChar(String field) {
+    private String normalizeFieldName(String field) {
         if (!Character.isLetterOrDigit(field.charAt(0))) {
             return field.substring(1);
         }

@@ -41,7 +41,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public List<BillDto> getAllBill(BillFilter billFilter, PaginationRequest paginationRequest, SortRequest sortRequest) {
-        Pageable pageRequest = PageRequest.of(paginationRequest.getOffset(), paginationRequest.getLimit(), Sort.by(sortRequest.extractSortOrder()));
+        Pageable pageRequest = PageRequest.of(paginationRequest.getOffset(), paginationRequest.getLimit(), Sort.by(sortRequest.buildSortOrders()));
         Bill probe = billMapper.convertToEntityFromFilter(billFilter);
 
         Page<Bill> billPage = billRepository.findAll(Example.of(probe), pageRequest);

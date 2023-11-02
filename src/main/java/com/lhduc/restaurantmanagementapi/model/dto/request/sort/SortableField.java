@@ -6,7 +6,7 @@ import org.springframework.data.domain.Sort.Direction;
 
 @Getter
 @Setter
-public class SortItem {
-    private String sortField;
-    private Direction sortType;
+public class SortableField {
+    private String fieldName;
+    private Direction sortDirection;
 }

@@ -2,12 +2,11 @@ package com.lhduc.restaurantmanagementapi.controller;
 
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.AddMoreItemToBillRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillCreateRequest;
-import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillDetailCreateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.PaginationRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillDetailUpdateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillFilter;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillUpdateRequest;
-import com.lhduc.restaurantmanagementapi.model.dto.request.sort.BillSort;
+import com.lhduc.restaurantmanagementapi.model.dto.request.sort.BillSortRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.response.BillDto;
 import com.lhduc.restaurantmanagementapi.model.dto.response.SuccessResponse;
 import com.lhduc.restaurantmanagementapi.service.BillService;
@@ -15,7 +14,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,9 +38,9 @@ public class BillController {
 
     @GetMapping
     public ResponseEntity<SuccessResponse<List<BillDto>>> getAll(
-            BillFilter billFilter,
+            @Valid BillFilter billFilter,
             @Valid PaginationRequest paginationRequest,
-            @Valid BillSort sort
+            @Valid BillSortRequest sort
     ) {
         List<BillDto> bills = billService.getAllBill(billFilter, paginationRequest, sort);
         return ResponseEntity.ok(SuccessResponse.of(bills, GET_ALL_BILL_SUCCESSFULLY));
