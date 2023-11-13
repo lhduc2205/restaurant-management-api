@@ -12,12 +12,18 @@ import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.
 
 @ControllerAdvice
 public class RequestValidatorExceptionHandler {
+    /**
+     * Exception handler method to handle MethodArgumentNotValidException instances.
+     *
+     * @param exception The MethodArgumentNotValidException instance to handle.
+     * @return A ResponseEntity with an ErrorResponse containing the error message and HTTP status code.
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException exception) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(FAILED);
 
-        ex.getBindingResult().getAllErrors().forEach(error -> {
+        exception.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errorResponse.addError(fieldName, errorMessage);

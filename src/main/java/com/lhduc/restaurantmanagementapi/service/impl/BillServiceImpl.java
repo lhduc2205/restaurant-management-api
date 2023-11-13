@@ -43,7 +43,6 @@ public class BillServiceImpl implements BillService {
     public List<BillDto> getAllBill(BillFilter billFilter, PaginationRequest paginationRequest, SortRequest sortRequest) {
         Pageable pageRequest = PageRequest.of(paginationRequest.getOffset(), paginationRequest.getLimit(), Sort.by(sortRequest.buildSortOrders()));
         Bill probe = billMapper.convertToEntityFromFilter(billFilter);
-
         Page<Bill> billPage = billRepository.findAll(Example.of(probe), pageRequest);
         return billMapper.convertToDto(billPage.getContent());
     }
@@ -51,17 +50,16 @@ public class BillServiceImpl implements BillService {
     @Override
     public BillDto getBillById(int id) {
         Bill bill = this.getExistedBill(id);
-
         return billMapper.convertToDto(bill);
     }
 
     @Override
-    public void createBill(BillCreateRequest billRequest) {
+    public BillDto createBill(BillCreateRequest billRequest) {
         Bill bill = new Bill();
         List<BillDetail> billDetailsToCreate = this.createBillDetailsForBill(bill, billRequest.getItems());
         bill.setBillDetails(billDetailsToCreate);
-
-        billRepository.save(bill);
+        Bill createdBill = billRepository.save(bill);
+        return billMapper.convertToDto(createdBill);
     }
 
     @Override
@@ -76,13 +74,11 @@ public class BillServiceImpl implements BillService {
         Bill bill = getExistedBill(billId);
         this.ensureBillIsEditable(bill);
         bill.update(billUpdateRequest);
-
         for (BillDetailUpdateRequest billDetailUpdateRequest : billUpdateRequest.getDetails()) {
             MenuItem menuItem = this.getExistedMenuItem(billDetailUpdateRequest.getMenuItemId());
             BillDetail billDetailToUpdate = this.getExistedBillDetail(bill.getId(), menuItem.getId());
             billDetailToUpdate.update(billDetailUpdateRequest);
         }
-
         billRepository.save(bill);
     }
 
@@ -91,28 +87,25 @@ public class BillServiceImpl implements BillService {
         Bill bill = this.getExistedBill(billId);
         this.ensureBillIsEditable(bill);
         List<BillDetail> billDetailsToUpdate = new ArrayList<>();
-
         for (BillDetailUpdateRequest billDetailUpdateRequest : billDetailsRequest) {
             MenuItem menuItem = this.getExistedMenuItem(billDetailUpdateRequest.getMenuItemId());
             BillDetail billDetailToUpdate = this.getExistedBillDetail(bill.getId(), menuItem.getId());
             billDetailToUpdate.update(billDetailUpdateRequest);
             billDetailsToUpdate.add(billDetailToUpdate);
         }
-
         billDetailRepository.saveAll(billDetailsToUpdate);
     }
 
     @Override
     public void deleteBillById(int id) {
         Bill bill = getExistedBill(id);
-        ensureBillIsEditable(bill);
-
+        this.ensureBillIsEditable(bill);
         billRepository.deleteById(id);
     }
 
     @Override
-    public void deleteBillItem(int billId, int menuItem) {
-        BillDetail billDetail = getExistedBillDetail(billId, menuItem);
+    public void deleteBillItem(int billId, int menuItemId) {
+        BillDetail billDetail = getExistedBillDetail(billId, menuItemId);
         billDetailRepository.delete(billDetail);
     }
 
@@ -140,7 +133,6 @@ public class BillServiceImpl implements BillService {
             BillDetail newBillDetail = this.createBillDetail(bill, menuItem, billDetailRequest);
             billDetailsToCreate.add(newBillDetail);
         }
-
         return billDetailsToCreate;
     }
 
@@ -152,7 +144,6 @@ public class BillServiceImpl implements BillService {
         billDetailToCreate.setDescription(billDetailInfo.getDescription());
         billDetailToCreate.setBill(bill);
         billDetailToCreate.setMenuItem(menuItem);
-
         return billDetailToCreate;
     }
 

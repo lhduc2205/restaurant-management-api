@@ -35,35 +35,33 @@ public class MenuItemServiceImpl implements MenuItemService {
     public List<MenuItemDto> getAll(MenuItemFilter menuItemFilter, PaginationRequest paginationRequest, SortRequest sortRequest) {
         Pageable pageRequest = PageRequest.of(paginationRequest.getOffset(), paginationRequest.getLimit(), Sort.by(sortRequest.buildSortOrders()));
         MenuItem probe = menuItemMapper.convertToEntityFromFilter(menuItemFilter);
-
         Page<MenuItem> menuItemPage = menuItemRepository.findAll(Example.of(probe), pageRequest);
         return menuItemMapper.convertToDto(menuItemPage.getContent());
     }
 
     @Override
-    public MenuItemDto getById(int id) {
-        MenuItem menuItem = this.getExistedMenuItem(id);
-
+    public MenuItemDto getById(int menuItemId) {
+        MenuItem menuItem = this.getExistedMenuItem(menuItemId);
         return menuItemMapper.convertToDto(menuItem);
     }
 
     @Override
-    public void create(MenuItemCreateRequest request) {
-        MenuItem menuItem = menuItemMapper.convertToEntityFromRequest(request);
+    public MenuItemDto create(MenuItemCreateRequest menuItemCreateRequest) {
+        MenuItem menuItem = menuItemMapper.convertToEntityFromRequest(menuItemCreateRequest);
+        MenuItem createdMenuItem = menuItemRepository.save(menuItem);
+        return menuItemMapper.convertToDto(createdMenuItem);
+    }
+
+    @Override
+    public void update(int menuItemId, MenuItemUpdateRequest menuItemUpdateRequest) {
+        MenuItem menuItem = this.getExistedMenuItem(menuItemId);
+        menuItem.setName(menuItemUpdateRequest.getName());
+        menuItem.setPrice(menuItemUpdateRequest.getPrice());
         menuItemRepository.save(menuItem);
     }
 
     @Override
-    public void update(int id, MenuItemUpdateRequest request) {
-        MenuItem menuItem = this.getExistedMenuItem(id);
-
-        menuItem.setName(request.getName());
-        menuItem.setPrice(request.getPrice());
-        menuItemRepository.save(menuItem);
-    }
-
-    @Override
-    public void deleteById(int id) {
+    public void deleteById(int menuItemId) {
         throw new OperationForbiddenException(UNABLE_TO_DELETE_MENU_ITEM);
     }
 

@@ -8,6 +8,19 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface MenuItemMapper extends BaseMapper<MenuItemDto, MenuItem> {
+    /**
+     * Converts a MenuItemCreateRequest DTO to MenuItem entity.
+     *
+     * @param requestDto The MenuItemCreateRequest object to convert.
+     * @return A MenuItem entity representing the data from the DTO.
+     */
     MenuItem convertToEntityFromRequest(MenuItemCreateRequest requestDto);
+
+    /**
+     * Converts a MenuItemFilter DTO to MenuItem entity.
+     *
+     * @param menuItemFilter The MenuItemFilter object to convert.
+     * @return A MenuItem entity representing the data from the DTO.
+     */
     MenuItem convertToEntityFromFilter(MenuItemFilter menuItemFilter);
 }

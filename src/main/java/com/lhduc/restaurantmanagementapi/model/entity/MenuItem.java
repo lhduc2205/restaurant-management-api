@@ -6,16 +6,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 @Entity(name = "menu_items")
 public class MenuItem {
     @Id
@@ -38,4 +38,9 @@ public class MenuItem {
 
     @OneToMany(mappedBy = "menuItem")
     private List<BillDetail> billDetail;
+
+    public MenuItem(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
 }
