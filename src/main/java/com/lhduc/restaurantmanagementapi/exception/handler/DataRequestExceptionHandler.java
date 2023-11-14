@@ -2,6 +2,7 @@ package com.lhduc.restaurantmanagementapi.exception.handler;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.lhduc.restaurantmanagementapi.exception.NotFoundException;
+import com.lhduc.restaurantmanagementapi.exception.OperationForbiddenException;
 import com.lhduc.restaurantmanagementapi.model.dto.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,20 @@ public class DataRequestExceptionHandler {
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    /**
+     * Exception handler method to handle OperationForbiddenException instances.
+     *
+     * @param exception The OperationForbiddenException instance to handle.
+     * @return A ResponseEntity with an ErrorResponse containing the error message and HTTP status code.
+     */
+    @ExceptionHandler(OperationForbiddenException.class)
+    public ResponseEntity<ErrorResponse> handleOperationForbiddenException(OperationForbiddenException exception) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(exception.getMessage());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
     }
 
     /**

@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: "jdbc:h2:mem:restaurant-db"
+    username: "lhduc"
+    password: "@3563949Zx"
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update

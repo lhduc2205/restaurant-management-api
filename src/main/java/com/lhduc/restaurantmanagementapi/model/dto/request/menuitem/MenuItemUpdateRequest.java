@@ -1,13 +1,11 @@
 package com.lhduc.restaurantmanagementapi.model.dto.request.menuitem;
 
 import jakarta.validation.constraints.Min;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.PRICE_MUST_BE_AT_LEAST_1;
 
-@Getter
-@Setter
+@Data
 public class MenuItemUpdateRequest {
     private String name;
 
