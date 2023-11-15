@@ -11,38 +11,39 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.List;
 
-@Getter
-@Setter
-@Entity(name = "bills")
+import static com.lhduc.restaurantmanagementapi.common.constant.DatabaseConstant.BILLS_TABLE_NAME;
+import static com.lhduc.restaurantmanagementapi.common.constant.DatabaseConstant.CREATED_AT_COLUMN_NAME;
+import static com.lhduc.restaurantmanagementapi.common.constant.DatabaseConstant.UPDATED_AT_COLUMN_NAME;
+
+@Data
+@Entity(name = BILLS_TABLE_NAME)
 public class Bill {
+    private static final String PAYMENT_STATUS_COLUMN_NAME = "payment_status";
+    private static final String BILL_MAPPING = "bill";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment_status", nullable = false)
+    @Column(name = PAYMENT_STATUS_COLUMN_NAME, nullable = false)
     private PaymentStatus paymentStatus = PaymentStatus.UNPAID;
 
     @CreationTimestamp
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(name = CREATED_AT_COLUMN_NAME)
+    private Timestamp createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @Column(name = UPDATED_AT_COLUMN_NAME)
+    private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = BILL_MAPPING, cascade = CascadeType.ALL)
     private List<BillDetail> billDetails;
-
-    public void update(BillUpdateRequest billUpdateRequest) {
-        this.paymentStatus = billUpdateRequest.getPaymentStatus();
-    }
 }

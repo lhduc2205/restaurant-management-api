@@ -7,13 +7,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.validation.constraints.Min;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@Entity(name = "bill_details")
+import static com.lhduc.restaurantmanagementapi.common.constant.DatabaseConstant.BILL_DETAILS_TABLE_NAME;
+
+@Data
+@Entity(name = BILL_DETAILS_TABLE_NAME)
 public class BillDetail {
+    private static final String BILL_ID_MAPPING = "billId";
+    private static final String MENU_ITEM_ID_MAPPING = "menuItemId";
+
     @EmbeddedId
     private BillDetailPK id;
 
@@ -27,20 +30,10 @@ public class BillDetail {
     private String description;
 
     @ManyToOne
-    @MapsId("billId")
+    @MapsId(BILL_ID_MAPPING)
     private Bill bill;
 
     @ManyToOne
-    @MapsId("menuItemId")
+    @MapsId(MENU_ITEM_ID_MAPPING)
     private MenuItem menuItem;
-
-    public void update(BillDetailUpdateRequest billDetailUpdateRequest) {
-        if (billDetailUpdateRequest.getQuantity() != 0) {
-            this.quantity = billDetailUpdateRequest.getQuantity();
-        }
-        if (billDetailUpdateRequest.getPricePerUnit() != 0) {
-            this.pricePerUnit = billDetailUpdateRequest.getPricePerUnit();
-        }
-        this.description = billDetailUpdateRequest.getDescription();
-    }
 }

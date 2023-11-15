@@ -13,6 +13,7 @@ import com.lhduc.restaurantmanagementapi.model.entity.MenuItem;
 import com.lhduc.restaurantmanagementapi.repository.MenuItemRepository;
 import com.lhduc.restaurantmanagementapi.service.MenuItemService;
 import com.lhduc.restaurantmanagementapi.model.mappers.MenuItemMapper;
+import com.lhduc.restaurantmanagementapi.util.RepositoryUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.MENU_ITEM_NOT_FOUND;
 import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.UNABLE_TO_DELETE_MENU_ITEM;
 
 @Service
@@ -41,7 +43,7 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public MenuItemDto getById(int menuItemId) {
-        MenuItem menuItem = this.getExistedMenuItem(menuItemId);
+        MenuItem menuItem = this.findMenuItemByIdOrThrow(menuItemId);
         return menuItemMapper.convertToDto(menuItem);
     }
 
@@ -54,7 +56,7 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public void update(int menuItemId, MenuItemUpdateRequest menuItemUpdateRequest) {
-        MenuItem menuItem = this.getExistedMenuItem(menuItemId);
+        MenuItem menuItem = this.findMenuItemByIdOrThrow(menuItemId);
         menuItem.setName(menuItemUpdateRequest.getName());
         menuItem.setPrice(menuItemUpdateRequest.getPrice());
         menuItemRepository.save(menuItem);
@@ -65,9 +67,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         throw new OperationForbiddenException(UNABLE_TO_DELETE_MENU_ITEM);
     }
 
-    private MenuItem getExistedMenuItem(int id) {
-        return menuItemRepository
-                .findById(id)
-                .orElseThrow(() -> new NotFoundException(MessageConstant.MENU_ITEM_NOT_FOUND));
+    private MenuItem findMenuItemByIdOrThrow(int menuItemId) {
+        return RepositoryUtil.findEntityByIdOrThrow(menuItemId, menuItemRepository, MENU_ITEM_NOT_FOUND);
     }
 }

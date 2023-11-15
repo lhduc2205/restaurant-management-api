@@ -11,13 +11,19 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.List;
+
+import static com.lhduc.restaurantmanagementapi.common.constant.DatabaseConstant.CREATED_AT_COLUMN_NAME;
+import static com.lhduc.restaurantmanagementapi.common.constant.DatabaseConstant.MENU_ITEMS_TABLE_NAME;
+import static com.lhduc.restaurantmanagementapi.common.constant.DatabaseConstant.UPDATED_AT_COLUMN_NAME;
 
 @Data
 @NoArgsConstructor
-@Entity(name = "menu_items")
+@Entity(name = MENU_ITEMS_TABLE_NAME)
 public class MenuItem {
+    private static final String MENU_ITEM_MAPPING = "menuItem";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -29,18 +35,13 @@ public class MenuItem {
     private Double price;
 
     @CreationTimestamp
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(name = CREATED_AT_COLUMN_NAME)
+    private Timestamp createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @Column(name = UPDATED_AT_COLUMN_NAME)
+    private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "menuItem")
+    @OneToMany(mappedBy = MENU_ITEM_MAPPING)
     private List<BillDetail> billDetail;
-
-    public MenuItem(String name, double price) {
-        this.name = name;
-        this.price = price;
-    }
 }
