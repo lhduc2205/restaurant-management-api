@@ -27,8 +27,6 @@ public class BillDetail {
     @Column(nullable = false)
     private Double pricePerUnit;
 
-    private String description;
-
     @ManyToOne
     @MapsId(BILL_ID_MAPPING)
     private Bill bill;

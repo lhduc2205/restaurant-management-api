@@ -47,8 +47,8 @@ class BillControllerTest {
     private BillService billService;
 
     private static final BillDto BILL_1 = new BillDto(1, Arrays.asList(
-            new BillDetailDto(10, "a", 1000),
-            new BillDetailDto(2, "b", 2000)
+            new BillDetailDto(10, 1000),
+            new BillDetailDto(2, 2000)
     ));
     private static final BillDto BILL_2 = new BillDto(2, new ArrayList<>());
 

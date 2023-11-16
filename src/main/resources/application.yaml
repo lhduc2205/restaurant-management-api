@@ -2,6 +2,10 @@ logging:
   level:
     root: info
 spring:
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/restaurant-db
+    username: 'postgres'
+    password: '@3563949Zx'
   jpa:
     show-sql: true
     hibernate:

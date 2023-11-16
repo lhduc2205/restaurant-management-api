@@ -54,7 +54,7 @@ public interface BillService {
 
 
     /**
-     * Updates the status or items of an existing bill.
+     * Updates the status of an existing bill.
      *
      * @param billId      The unique ID of the bill to be updated.
      * @param billRequest The request object containing the details for updating the bill,

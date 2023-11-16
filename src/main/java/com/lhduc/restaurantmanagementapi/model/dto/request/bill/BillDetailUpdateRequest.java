@@ -13,6 +13,4 @@ public class BillDetailUpdateRequest {
     private int quantity;
 
     private double pricePerUnit;
-
-    private String description;
 }

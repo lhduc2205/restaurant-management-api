@@ -10,17 +10,14 @@ import lombok.Setter;
 public class BillDetailDto {
     private int quantity;
 
-    private String description;
-
     private double pricePerUnit;
 
     private double totalPrice;
 
     private MenuItemDto menuItem;
 
-    public BillDetailDto(int quantity, String description, double pricePerUnit) {
+    public BillDetailDto(int quantity, double pricePerUnit) {
         this.quantity = quantity;
-        this.description = description;
         this.pricePerUnit = pricePerUnit;
     }
 

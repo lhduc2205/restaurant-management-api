@@ -13,6 +13,4 @@ import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.
 public class BillUpdateRequest {
     @NotNull(message = PAYMENT_STATUS_CAN_NOT_BE_EMPTY)
     private PaymentStatus paymentStatus;
-
-    private List<BillDetailUpdateRequest> details = new ArrayList<>();
 }

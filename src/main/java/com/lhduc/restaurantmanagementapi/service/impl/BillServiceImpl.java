@@ -48,6 +48,7 @@ public class BillServiceImpl implements BillService {
         Pageable pageRequest = PageRequest.of(paginationRequest.getOffset(), paginationRequest.getLimit(), Sort.by(sortRequest.buildSortOrders()));
         Bill probe = billMapper.convertToEntityFromFilter(billFilter);
         Page<Bill> billPage = billRepository.findAll(Example.of(probe), pageRequest);
+
         return billMapper.convertToDto(billPage.getContent());
     }
 
@@ -60,44 +61,70 @@ public class BillServiceImpl implements BillService {
     @Override
     public BillDto createBill(BillCreateRequest billRequest) {
         Bill bill = new Bill();
-        List<BillDetail> billDetailsToCreate = this.createBillDetailsForBill(bill, billRequest.getItems());
-        bill.setBillDetails(billDetailsToCreate);
+        List<BillDetail> billDetails = new ArrayList<>();
+
+        for (BillDetailCreateRequest billDetailRequest : billRequest.getItems()) {
+            MenuItem menuItem = this.findMenuItemByIdOrThrow(billDetailRequest.getMenuItemId());
+            BillDetail newBillDetail = this.generateBillDetail(bill, menuItem, billDetailRequest);
+
+            billDetails.add(newBillDetail);
+        }
+
+        bill.setBillDetails(billDetails);
         Bill createdBill = billRepository.save(bill);
+
         return billMapper.convertToDto(createdBill);
     }
 
     @Override
-    public void addMoreBillItems(int billId, List<BillDetailCreateRequest> billDetailsRequest) {
+    public void addMoreBillItems(int billId, List<BillDetailCreateRequest> requests) {
         Bill bill = this.findBillByIdOrThrow(billId);
         this.validateEditableBillStatus(bill);
-        this.handleCreateOrUpdateBillDetailsFromRequest(bill, billDetailsRequest);
+
+        List<BillDetail> billDetails = new ArrayList<>();
+
+        for (BillDetailCreateRequest request : requests) {
+            MenuItem menuItem = this.findMenuItemByIdOrThrow(request.getMenuItemId());
+            Optional<BillDetail> billDetailOptional = billDetailRepository.findById(new BillDetailPK(bill.getId(), menuItem.getId()));
+
+            if (billDetailOptional.isPresent()) {
+                this.addToBillDetailQuantity(billDetailOptional.get(), request.getQuantity());
+                billDetails.add(billDetailOptional.get());
+            } else {
+                BillDetail newBillDetail = generateBillDetail(bill, menuItem, request);
+                billDetails.add(newBillDetail);
+            }
+        }
+
+        billDetailRepository.saveAll(billDetails);
     }
 
     @Override
-    public void updateBill(int billId, BillUpdateRequest billUpdateRequest) {
+    public void updateBill(int billId, BillUpdateRequest request) {
         Bill bill = this.findBillByIdOrThrow(billId);
         this.validateEditableBillStatus(bill);
-        bill.setPaymentStatus(billUpdateRequest.getPaymentStatus());
-        for (BillDetailUpdateRequest billDetailUpdateRequest : billUpdateRequest.getDetails()) {
-            MenuItem menuItem = this.findMenuItemByIdOrThrow(billDetailUpdateRequest.getMenuItemId());
-            BillDetail billDetailToUpdate = this.findBillDetailByIdOrThrow(bill.getId(), menuItem.getId());
-            this.updateBillDetailFromUpdateRequest(billDetailToUpdate, billDetailUpdateRequest);
-        }
+        bill.setPaymentStatus(request.getPaymentStatus());
+
         billRepository.save(bill);
     }
 
     @Override
-    public void updateBillItems(int billId, List<BillDetailUpdateRequest> billDetailsRequest) {
+    public void updateBillItems(int billId, List<BillDetailUpdateRequest> requests) {
         Bill bill = this.findBillByIdOrThrow(billId);
         this.validateEditableBillStatus(bill);
-        List<BillDetail> billDetailsToUpdate = new ArrayList<>();
-        for (BillDetailUpdateRequest billDetailUpdateRequest : billDetailsRequest) {
-            MenuItem menuItem = this.findMenuItemByIdOrThrow(billDetailUpdateRequest.getMenuItemId());
-            BillDetail billDetailToUpdate = this.findBillDetailByIdOrThrow(bill.getId(), menuItem.getId());
-            this.updateBillDetailFromUpdateRequest(billDetailToUpdate, billDetailUpdateRequest);
-            billDetailsToUpdate.add(billDetailToUpdate);
+        List<BillDetail> billDetails = new ArrayList<>();
+
+        for (BillDetailUpdateRequest request : requests) {
+            MenuItem menuItem = this.findMenuItemByIdOrThrow(request.getMenuItemId());
+            BillDetail billDetail = this.findBillDetailByIdOrThrow(bill.getId(), menuItem.getId());
+
+            billDetail.setQuantity(request.getQuantity());
+            billDetail.setPricePerUnit(request.getPricePerUnit());
+
+            billDetails.add(billDetail);
         }
-        billDetailRepository.saveAll(billDetailsToUpdate);
+
+        billDetailRepository.saveAll(billDetails);
     }
 
     @Override
@@ -113,47 +140,15 @@ public class BillServiceImpl implements BillService {
         billDetailRepository.delete(billDetail);
     }
 
-    private void updateBillDetailFromUpdateRequest(BillDetail billDetailToUpdate, BillDetailUpdateRequest request) {
-        billDetailToUpdate.setQuantity(request.getQuantity());
-        billDetailToUpdate.setDescription(request.getDescription());
-        billDetailToUpdate.setPricePerUnit(request.getPricePerUnit());
-    }
-
-    private void handleCreateOrUpdateBillDetailsFromRequest(Bill bill, List<BillDetailCreateRequest> request) {
-        List<BillDetail> billDetailsToSave = new ArrayList<>();
-        for (BillDetailCreateRequest billDetailRequest : request) {
-            MenuItem menuItem = this.findMenuItemByIdOrThrow(billDetailRequest.getMenuItemId());
-            Optional<BillDetail> billDetail = billDetailRepository.findById(new BillDetailPK(bill.getId(), menuItem.getId()));
-            if (billDetail.isPresent()) {
-                BillDetail existedBillDetail = this.findBillDetailByIdOrThrow(bill.getId(), menuItem.getId());
-                this.addToBillDetailQuantity(existedBillDetail, billDetailRequest.getQuantity());
-                billDetailsToSave.add(existedBillDetail);
-            } else {
-                BillDetail newBillDetail = createBillDetail(bill, menuItem, billDetailRequest);
-                billDetailsToSave.add(newBillDetail);
-            }
-        }
-        billDetailRepository.saveAll(billDetailsToSave);
-    }
-
-    private List<BillDetail> createBillDetailsForBill(Bill bill, List<BillDetailCreateRequest> request) {
-        List<BillDetail> billDetailsToCreate = new ArrayList<>();
-        for (BillDetailCreateRequest billDetailRequest : request) {
-            MenuItem menuItem = this.findMenuItemByIdOrThrow(billDetailRequest.getMenuItemId());
-            BillDetail newBillDetail = this.createBillDetail(bill, menuItem, billDetailRequest);
-            billDetailsToCreate.add(newBillDetail);
-        }
-        return billDetailsToCreate;
-    }
-
-    private BillDetail createBillDetail(Bill bill, MenuItem menuItem, BillDetailCreateRequest billDetailInfo) {
+    private BillDetail generateBillDetail(Bill bill, MenuItem menuItem, BillDetailCreateRequest billDetailInfo) {
         BillDetail billDetailToCreate = new BillDetail();
+
         billDetailToCreate.setId(new BillDetailPK(bill.getId(), menuItem.getId()));
         billDetailToCreate.setQuantity(billDetailInfo.getQuantity());
         billDetailToCreate.setPricePerUnit(menuItem.getPrice());
-        billDetailToCreate.setDescription(billDetailInfo.getDescription());
         billDetailToCreate.setBill(bill);
         billDetailToCreate.setMenuItem(menuItem);
+
         return billDetailToCreate;
     }
 

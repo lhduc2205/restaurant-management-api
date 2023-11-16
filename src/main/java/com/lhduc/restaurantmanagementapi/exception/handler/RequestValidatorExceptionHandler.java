@@ -26,6 +26,10 @@ public class RequestValidatorExceptionHandler {
         exception.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
+
+            Object fieldError = ((FieldError) error).getRejectedValue();
+
+            errorResponse.setMessage("Invalid value: " + fieldError);
             errorResponse.addError(fieldName, errorMessage);
         });
 

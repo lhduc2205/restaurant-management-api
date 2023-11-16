@@ -11,6 +11,4 @@ public class BillDetailCreateRequest {
 
     @Min(value = 1, message = QUANTITY_MUST_BE_AT_LEAST_1)
     private Integer quantity;
-
-    private String description;
 }
