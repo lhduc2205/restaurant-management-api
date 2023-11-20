@@ -53,8 +53,8 @@ class MenuItemServiceImplTest {
             ITEM_IDS[i] = menuItem.getId();
         }
 
-        for (int i = 0; i < ITEM_IDS.length; i++) {
-            assertTrue(menuItemRepository.existsById(ITEM_IDS[i]));
+        for (int itemId : ITEM_IDS) {
+            assertTrue(menuItemRepository.existsById(itemId));
         }
 
     }

@@ -11,6 +11,7 @@ import com.lhduc.restaurantmanagementapi.model.entity.MenuItem;
 import com.lhduc.restaurantmanagementapi.repository.MenuItemRepository;
 import com.lhduc.restaurantmanagementapi.service.MenuItemService;
 import com.lhduc.restaurantmanagementapi.model.mappers.MenuItemMapper;
+import com.lhduc.restaurantmanagementapi.util.MenuItemRepositoryUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.
 @RequiredArgsConstructor
 public class MenuItemServiceImpl implements MenuItemService {
     private final MenuItemRepository menuItemRepository;
+    private final MenuItemRepositoryUtil menuItemRepositoryUtil;
     private final MenuItemMapper menuItemMapper;
 
     @Override
@@ -39,7 +41,7 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public MenuItemDto getById(int menuItemId) {
-        MenuItem menuItem = menuItemRepository.findByIdOrThrow(menuItemId);
+        MenuItem menuItem = menuItemRepositoryUtil.findByIdOrThrow(menuItemId);
         return menuItemMapper.convertToDto(menuItem);
     }
 
@@ -52,7 +54,7 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public void update(int menuItemId, MenuItemUpdateRequest menuItemUpdateRequest) {
-        MenuItem menuItem = menuItemRepository.findByIdOrThrow(menuItemId);
+        MenuItem menuItem = menuItemRepositoryUtil.findByIdOrThrow(menuItemId);
         menuItem.setName(menuItemUpdateRequest.getName());
         menuItem.setPrice(menuItemUpdateRequest.getPrice());
         menuItemRepository.save(menuItem);
