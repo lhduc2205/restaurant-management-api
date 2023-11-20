@@ -8,8 +8,8 @@ import java.lang.reflect.Field;
 
 public class SortingValidator implements ConstraintValidator<SortingConstraint, String> {
     private SortingConstraint sortingConstraint;
-    private static final String FIELD_SEPARATOR = ",";
-    private static final String DESC_SIGN = "-";
+    private static final String FIELD_DELIMITER = ",";
+    private static final String DESCENDING_SIGN = "-";
 
     @Override
     public void initialize(SortingConstraint constraintAnnotation) {
@@ -19,19 +19,15 @@ public class SortingValidator implements ConstraintValidator<SortingConstraint, 
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (value == null) {
+        if (value == null)
             return true;
-        }
 
         Class<?> sortingClass = sortingConstraint.sortClass();
-        String[] requestedFields = value.split(FIELD_SEPARATOR);
+        String[] requestedFields = value.split(FIELD_DELIMITER);
 
         for (String sortField : requestedFields) {
-            boolean isValid = this.checkValidField(sortField, sortingClass);
-
-            if (!isValid) {
+            if (!this.checkValidField(sortField, sortingClass))
                 return false;
-            }
         }
 
         return true;
@@ -42,7 +38,7 @@ public class SortingValidator implements ConstraintValidator<SortingConstraint, 
 
         for (Field field : fields) {
             String declaredFieldName = field.getName();
-            if (fieldName.equals(declaredFieldName) || fieldName.equals(DESC_SIGN + declaredFieldName)) {
+            if (fieldName.equals(declaredFieldName) || fieldName.equals(DESCENDING_SIGN + declaredFieldName)) {
                 return true;
             }
         }

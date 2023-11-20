@@ -1,6 +1,6 @@
 package com.lhduc.restaurantmanagementapi.common.constant;
 
-public class DatabaseConstant {
+public final class DatabaseConstant {
     private DatabaseConstant() {
     }
 

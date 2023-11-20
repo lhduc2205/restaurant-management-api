@@ -18,7 +18,6 @@ import com.lhduc.restaurantmanagementapi.repository.BillDetailRepository;
 import com.lhduc.restaurantmanagementapi.repository.BillRepository;
 import com.lhduc.restaurantmanagementapi.repository.MenuItemRepository;
 import com.lhduc.restaurantmanagementapi.service.BillService;
-import com.lhduc.restaurantmanagementapi.util.RepositoryUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -30,10 +29,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.BILL_DETAIL_NOT_FOUND;
-import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.BILL_NOT_FOUND;
-import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.MENU_ITEM_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -54,7 +49,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public BillDto getBillById(int billId) {
-        Bill bill = this.findBillByIdOrThrow(billId);
+        Bill bill = billRepository.findByIdOrThrow(billId);
         return billMapper.convertToDto(bill);
     }
 
@@ -64,7 +59,7 @@ public class BillServiceImpl implements BillService {
         List<BillDetail> billDetails = new ArrayList<>();
 
         for (BillDetailCreateRequest billDetailRequest : billRequest.getItems()) {
-            MenuItem menuItem = this.findMenuItemByIdOrThrow(billDetailRequest.getMenuItemId());
+            MenuItem menuItem = menuItemRepository.findByIdOrThrow(billDetailRequest.getMenuItemId());
             BillDetail newBillDetail = this.generateBillDetail(bill, menuItem, billDetailRequest);
 
             billDetails.add(newBillDetail);
@@ -78,13 +73,13 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public void addMoreBillItems(int billId, List<BillDetailCreateRequest> requests) {
-        Bill bill = this.findBillByIdOrThrow(billId);
+        Bill bill = billRepository.findByIdOrThrow(billId);
         this.validateEditableBillStatus(bill);
 
         List<BillDetail> billDetails = new ArrayList<>();
 
         for (BillDetailCreateRequest request : requests) {
-            MenuItem menuItem = this.findMenuItemByIdOrThrow(request.getMenuItemId());
+            MenuItem menuItem = menuItemRepository.findByIdOrThrow(request.getMenuItemId());
             Optional<BillDetail> billDetailOptional = billDetailRepository.findById(new BillDetailPK(bill.getId(), menuItem.getId()));
 
             if (billDetailOptional.isPresent()) {
@@ -101,7 +96,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public void updateBill(int billId, BillUpdateRequest request) {
-        Bill bill = this.findBillByIdOrThrow(billId);
+        Bill bill = billRepository.findByIdOrThrow(billId);
         this.validateEditableBillStatus(bill);
         bill.setPaymentStatus(request.getPaymentStatus());
 
@@ -110,13 +105,13 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public void updateBillItems(int billId, List<BillDetailUpdateRequest> requests) {
-        Bill bill = this.findBillByIdOrThrow(billId);
+        Bill bill = billRepository.findByIdOrThrow(billId);
         this.validateEditableBillStatus(bill);
         List<BillDetail> billDetails = new ArrayList<>();
 
         for (BillDetailUpdateRequest request : requests) {
-            MenuItem menuItem = this.findMenuItemByIdOrThrow(request.getMenuItemId());
-            BillDetail billDetail = this.findBillDetailByIdOrThrow(bill.getId(), menuItem.getId());
+            MenuItem menuItem = menuItemRepository.findByIdOrThrow(request.getMenuItemId());
+            BillDetail billDetail = billDetailRepository.findByIdOrThrow(bill.getId(), menuItem.getId());
 
             billDetail.setQuantity(request.getQuantity());
             billDetail.setPricePerUnit(request.getPricePerUnit());
@@ -129,22 +124,31 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public void deleteBillById(int billId) {
-        Bill bill = this.findBillByIdOrThrow(billId);
+        Bill bill = billRepository.findByIdOrThrow(billId);
         this.validateEditableBillStatus(bill);
         billRepository.deleteById(billId);
     }
 
     @Override
     public void deleteBillItem(int billId, int menuItemId) {
-        BillDetail billDetail = findBillDetailByIdOrThrow(billId, menuItemId);
+        BillDetail billDetail = billDetailRepository.findByIdOrThrow(billId, menuItemId);
         billDetailRepository.delete(billDetail);
     }
 
-    private BillDetail generateBillDetail(Bill bill, MenuItem menuItem, BillDetailCreateRequest billDetailInfo) {
+    /**
+     * Generates a new {@link BillDetail} instance based on the provided {@link Bill}, {@link MenuItem},
+     * and {@link BillDetailCreateRequest} objects.
+     *
+     * @param bill     The {@code Bill} associated with the new {@code BillDetail}.
+     * @param menuItem The {@code MenuItem} associated with the new {@code BillDetail}.
+     * @param request  The {@code BillDetailCreateRequest} containing information for creating the new {@code BillDetail}.
+     * @return A newly created {@code BillDetail} instance.
+     */
+    private BillDetail generateBillDetail(Bill bill, MenuItem menuItem, BillDetailCreateRequest request) {
         BillDetail billDetailToCreate = new BillDetail();
 
         billDetailToCreate.setId(new BillDetailPK(bill.getId(), menuItem.getId()));
-        billDetailToCreate.setQuantity(billDetailInfo.getQuantity());
+        billDetailToCreate.setQuantity(request.getQuantity());
         billDetailToCreate.setPricePerUnit(menuItem.getPrice());
         billDetailToCreate.setBill(bill);
         billDetailToCreate.setMenuItem(menuItem);
@@ -152,23 +156,23 @@ public class BillServiceImpl implements BillService {
         return billDetailToCreate;
     }
 
+    /**
+     * Adds the specific quantity to an existing quantity of a {@code BillDetail} object.
+     *
+     * @param billDetail    The {@code BillDetail} object to update.
+     * @param quantityToAdd The quantity to add to an existing quantity.
+     */
     private void addToBillDetailQuantity(BillDetail billDetail, int quantityToAdd) {
         int currentQuantity = billDetail.getQuantity();
         billDetail.setQuantity(currentQuantity + quantityToAdd);
     }
 
-    private Bill findBillByIdOrThrow(int billId) {
-        return RepositoryUtil.findEntityByIdOrThrow(billId, billRepository, BILL_NOT_FOUND);
-    }
-
-    private BillDetail findBillDetailByIdOrThrow(int billId, int menuItemId) {
-        return RepositoryUtil.findEntityByIdOrThrow(new BillDetailPK(billId, menuItemId), billDetailRepository, BILL_DETAIL_NOT_FOUND);
-    }
-
-    private MenuItem findMenuItemByIdOrThrow(int menuItemId) {
-        return RepositoryUtil.findEntityByIdOrThrow(menuItemId, menuItemRepository, MENU_ITEM_NOT_FOUND);
-    }
-
+    /**
+     * Validates if a payment status of a {@code Bill} object allows for edit operations.
+     *
+     * @param bill The {@code Bill} object to validate.
+     * @throws OperationForbiddenException If the payment status of the bill does not allow for edits.
+     */
     private void validateEditableBillStatus(Bill bill) {
         if (!bill.getPaymentStatus().isEditable()) {
             throw new OperationForbiddenException("Unable to access the bill has been " + bill.getPaymentStatus().name().toLowerCase());

@@ -1,6 +1,5 @@
 package com.lhduc.restaurantmanagementapi.model.entity;
 
-import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillDetailUpdateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

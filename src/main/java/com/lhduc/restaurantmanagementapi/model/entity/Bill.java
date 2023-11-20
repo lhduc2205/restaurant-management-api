@@ -1,7 +1,6 @@
 package com.lhduc.restaurantmanagementapi.model.entity;
 
 import com.lhduc.restaurantmanagementapi.common.enums.PaymentStatus;
-import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillUpdateRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

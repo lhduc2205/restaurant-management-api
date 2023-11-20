@@ -39,7 +39,7 @@ class MenuItemServiceImplTest {
 
     private static final int[] ITEM_PRICES = new int[]{20000, 30000};
 
-    private static int[] ITEM_IDS = new int[2];
+    private static final int[] ITEM_IDS = new int[2];
 
     @Test
     @Order(1)
