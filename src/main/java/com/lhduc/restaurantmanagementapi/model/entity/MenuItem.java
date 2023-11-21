@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -42,6 +43,7 @@ public class MenuItem {
     @Column(name = UPDATED_AT_COLUMN_NAME)
     private Timestamp updatedAt;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = MENU_ITEM_MAPPING)
     private List<BillDetail> billDetail;
 }

@@ -12,6 +12,8 @@ import com.lhduc.restaurantmanagementapi.service.MenuItemService;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,6 +37,7 @@ import static com.lhduc.restaurantmanagementapi.common.constant.UriConstant.MENU
 @RequestMapping(MENU_ITEMS_ENDPOINT)
 public class MenuItemController {
     private final MenuItemService menuItemService;
+    private final Logger logger = LoggerFactory.getLogger(MenuItemController.class);
 
     /**
      * Retrieves list of menu items based on the provided filtering, pagination, and sorting criteria.
@@ -54,6 +57,7 @@ public class MenuItemController {
             @Valid MenuItemSortRequest sort
     ) {
         List<MenuItemDto> menuItems = menuItemService.getAll(menuItemFilter, paginationRequest, sort);
+        logger.info("Get all menu items");
         return ResponseEntity.ok(SuccessResponse.of(menuItems, GET_ALL_MENU_ITEM_SUCCESSFULLY));
     }
 
@@ -67,6 +71,7 @@ public class MenuItemController {
     @GetMapping("{menuItemId}")
     public ResponseEntity<SuccessResponse<MenuItemDto>> getById(@PathVariable int menuItemId) {
         MenuItemDto menuItemDto = menuItemService.getById(menuItemId);
+        logger.info("Get menu item with id = {}", menuItemId);
         return ResponseEntity.ok(SuccessResponse.of(menuItemDto, GET_MENU_ITEM_BY_ID_SUCCESSFULLY));
     }
 
@@ -81,6 +86,7 @@ public class MenuItemController {
     @PostMapping
     public ResponseEntity<URI> create(@RequestBody @Valid MenuItemCreateRequest menuItemCreateRequest) {
         final MenuItemDto menuItem = menuItemService.create(menuItemCreateRequest);
+        logger.info("Create menu item with request: {}", menuItemCreateRequest);
         return ResponseEntity.created(URI.create(MENU_ITEMS_ENDPOINT + "/" + menuItem.getId())).build();
     }
 
@@ -97,6 +103,7 @@ public class MenuItemController {
     @PutMapping("{menuItemId}")
     public ResponseEntity<Void> update(@PathVariable int menuItemId, @RequestBody @Valid MenuItemUpdateRequest menuItemUpdateRequest) {
         menuItemService.update(menuItemId, menuItemUpdateRequest);
+        logger.info("Update menu item with id = {} and request = {}", menuItemId, menuItemUpdateRequest);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -110,6 +117,7 @@ public class MenuItemController {
     @DeleteMapping("{menuItemId}")
     public ResponseEntity<Void> delete(@PathVariable int menuItemId) {
         menuItemService.deleteById(menuItemId);
+        logger.info("Delete menu item with id = {}", menuItemId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -3,6 +3,7 @@ package com.lhduc.restaurantmanagementapi.model.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.validation.constraints.Min;
@@ -26,11 +27,11 @@ public class BillDetail {
     @Column(nullable = false)
     private Double pricePerUnit;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId(BILL_ID_MAPPING)
     private Bill bill;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId(MENU_ITEM_ID_MAPPING)
     private MenuItem menuItem;
 }

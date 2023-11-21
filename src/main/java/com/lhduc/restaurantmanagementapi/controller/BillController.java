@@ -5,9 +5,9 @@ import com.lhduc.restaurantmanagementapi.exception.OperationForbiddenException;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.AddMoreItemToBillRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillCreateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.PaginationRequest;
-import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillDetailUpdateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillFilter;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillUpdateRequest;
+import com.lhduc.restaurantmanagementapi.model.dto.request.bill.UpdateBillItemRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.sort.BillSortRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.response.BillDto;
 import com.lhduc.restaurantmanagementapi.model.dto.response.SuccessResponse;
@@ -15,6 +15,8 @@ import com.lhduc.restaurantmanagementapi.service.BillService;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,6 +40,7 @@ import static com.lhduc.restaurantmanagementapi.common.constant.UriConstant.BILL
 @RequestMapping(BILLS_ENDPOINT)
 public class BillController {
     private final BillService billService;
+    private final Logger logger = LoggerFactory.getLogger(BillController.class);
 
     /**
      * Retrieves a list of bills based on the provided filtering, pagination, and sorting criteria.
@@ -57,6 +60,7 @@ public class BillController {
             @Valid BillSortRequest sort
     ) {
         List<BillDto> bills = billService.getAllBill(billFilter, paginationRequest, sort);
+        logger.info("Get all bills");
         return ResponseEntity.ok(SuccessResponse.of(bills, GET_ALL_BILL_SUCCESSFULLY));
     }
 
@@ -71,6 +75,7 @@ public class BillController {
     @GetMapping("{billId}")
     public ResponseEntity<SuccessResponse<BillDto>> getById(@PathVariable("billId") int billId) {
         BillDto bill = billService.getBillById(billId);
+        logger.info("Get bill with id = {}", billId);
         return ResponseEntity.ok(SuccessResponse.of(bill, GET_BILL_BY_ID_SUCCESSFULLY));
     }
 
@@ -85,6 +90,7 @@ public class BillController {
     @PostMapping
     public ResponseEntity<URI> createBill(@RequestBody @Valid BillCreateRequest billRequest) {
         final BillDto bill = billService.createBill(billRequest);
+        logger.info("Create bill with request = {}", billRequest);
         return ResponseEntity.created(URI.create(BILLS_ENDPOINT + "/" + bill.getId())).build();
     }
 
@@ -104,6 +110,7 @@ public class BillController {
             @RequestBody @Valid AddMoreItemToBillRequest billDetailsRequest
     ) {
         billService.addMoreBillItems(billId, billDetailsRequest.getItems());
+        logger.info("Add more bill items with bill id = {} and request = {}", billId, billDetailsRequest.getItems());
         return ResponseEntity.created(URI.create(BILLS_ENDPOINT + "/" + billId)).build();
     }
 
@@ -124,14 +131,15 @@ public class BillController {
             @RequestBody @Valid BillUpdateRequest billUpdateRequest
     ) {
         billService.updateBill(billId, billUpdateRequest);
+        logger.info("Update bill with bill id = {} and request = {}", billId, billUpdateRequest);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     /**
      * Updates items of an existing bill.
      *
-     * @param billId                  The unique ID of the bill to be updated.
-     * @param billDetailUpdateRequest The request object containing the details for updating the bill items
+     * @param billId                The unique ID of the bill to be updated.
+     * @param updateBillItemRequest The request object containing the details for updating the bill items
      * @return A ResponseEntity indicating the successful update with a status of "No content"
      * @throws NotFoundException           if no bill or item is found with the given ID.
      * @throws ValidationException         if the input parameters fail validation.
@@ -140,9 +148,10 @@ public class BillController {
     @PutMapping("{billId}/items")
     public ResponseEntity<Void> updateBillItems(
             @PathVariable("billId") int billId,
-            @RequestBody @Valid List<BillDetailUpdateRequest> billDetailUpdateRequest
+            @RequestBody @Valid UpdateBillItemRequest updateBillItemRequest
     ) {
-        billService.updateBillItems(billId, billDetailUpdateRequest);
+        billService.updateBillItems(billId, updateBillItemRequest.getItems());
+        logger.info("Update bill items with bill id = {} and request = {}", billId, updateBillItemRequest.getItems());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -157,6 +166,7 @@ public class BillController {
     @DeleteMapping("{billId}")
     public ResponseEntity<Void> deleteBill(@PathVariable("billId") int billId) {
         billService.deleteBillById(billId);
+        logger.info("Delete bill with bill id = {}", billId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -175,6 +185,7 @@ public class BillController {
             @PathVariable("menuItemId") int menuItemId
     ) {
         billService.deleteBillItem(billId, menuItemId);
+        logger.info("Delete bill item with bill id = {} and menu item id = {}", billId, menuItemId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

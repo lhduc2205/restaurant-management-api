@@ -1,6 +1,8 @@
 package com.lhduc.restaurantmanagementapi.exception.handler;
 
 import com.lhduc.restaurantmanagementapi.model.dto.response.ErrorResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -12,6 +14,8 @@ import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.
 
 @ControllerAdvice
 public class RequestValidatorExceptionHandler {
+    private final Logger logger = LoggerFactory.getLogger(RequestValidatorExceptionHandler.class);
+
     /**
      * Exception handler method to handle MethodArgumentNotValidException instances.
      *
@@ -22,14 +26,13 @@ public class RequestValidatorExceptionHandler {
     public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException exception) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(FAILED);
+        logger.error(exception.getMessage());
 
         exception.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
 
-            Object fieldError = ((FieldError) error).getRejectedValue();
-
-            errorResponse.setMessage("Invalid value: " + fieldError);
+            errorResponse.setMessage("Invalid value");
             errorResponse.addError(fieldName, errorMessage);
         });
 

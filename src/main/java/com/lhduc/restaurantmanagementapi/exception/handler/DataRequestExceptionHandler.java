@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.lhduc.restaurantmanagementapi.exception.NotFoundException;
 import com.lhduc.restaurantmanagementapi.exception.OperationForbiddenException;
 import com.lhduc.restaurantmanagementapi.model.dto.response.ErrorResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,6 +15,8 @@ import java.util.Arrays;
 
 @ControllerAdvice
 public class DataRequestExceptionHandler {
+    private final Logger logger = LoggerFactory.getLogger(DataRequestExceptionHandler.class);
+
     /**
      * Exception handler method to handle NotFoundException instances.
      *
@@ -21,6 +25,7 @@ public class DataRequestExceptionHandler {
      */
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException exception) {
+        logger.error(exception.getMessage());
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(exception.getMessage());
 
@@ -35,6 +40,7 @@ public class DataRequestExceptionHandler {
      */
     @ExceptionHandler(InvalidFormatException.class)
     public ResponseEntity<ErrorResponse> handleInvalidFormatException(InvalidFormatException exception) {
+        logger.error(exception.getMessage());
         ErrorResponse errorResponse = new ErrorResponse();
         if (this.isEnumOf(exception.getTargetType())) {
             this.handleInvalidEnum(errorResponse, exception);
@@ -51,6 +57,7 @@ public class DataRequestExceptionHandler {
      */
     @ExceptionHandler(OperationForbiddenException.class)
     public ResponseEntity<ErrorResponse> handleOperationForbiddenException(OperationForbiddenException exception) {
+        logger.error(exception.getMessage());
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(exception.getMessage());
 
@@ -71,7 +78,7 @@ public class DataRequestExceptionHandler {
      * Handles an InvalidFormatException related to invalid enum values and populates an ErrorResponse.
      *
      * @param errorResponse The ErrorResponse is to be populated with error information.
-     * @param exception The InvalidFormatException to be handled.
+     * @param exception     The InvalidFormatException to be handled.
      */
     private void handleInvalidEnum(ErrorResponse errorResponse, InvalidFormatException exception) {
         String errorFieldName = exception.getPath().get(exception.getPath().size() - 1).getFieldName();

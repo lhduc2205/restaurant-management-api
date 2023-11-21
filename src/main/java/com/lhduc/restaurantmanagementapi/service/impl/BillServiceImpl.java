@@ -20,6 +20,7 @@ import com.lhduc.restaurantmanagementapi.service.BillService;
 import com.lhduc.restaurantmanagementapi.util.BillDetailRepositoryUtil;
 import com.lhduc.restaurantmanagementapi.util.BillRepositoryUtil;
 import com.lhduc.restaurantmanagementapi.util.MenuItemRepositoryUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;

@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -43,6 +44,7 @@ public class Bill {
     @Column(name = UPDATED_AT_COLUMN_NAME)
     private Timestamp updatedAt;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = BILL_MAPPING, cascade = CascadeType.ALL)
     private List<BillDetail> billDetails;
 }
