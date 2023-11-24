@@ -1,12 +1,13 @@
 package com.lhduc.restaurantmanagementapi.service.impl;
 
+import com.lhduc.restaurantmanagementapi.exception.NotFoundException;
 import com.lhduc.restaurantmanagementapi.exception.OperationForbiddenException;
+import com.lhduc.restaurantmanagementapi.model.dto.request.PaginationRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillCreateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillDetailCreateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillDetailUpdateRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillFilter;
 import com.lhduc.restaurantmanagementapi.model.dto.request.bill.BillUpdateRequest;
-import com.lhduc.restaurantmanagementapi.model.dto.request.PaginationRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.sort.SortRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.response.BillDto;
 import com.lhduc.restaurantmanagementapi.model.entity.Bill;
@@ -16,11 +17,9 @@ import com.lhduc.restaurantmanagementapi.model.entity.MenuItem;
 import com.lhduc.restaurantmanagementapi.model.mappers.BillMapper;
 import com.lhduc.restaurantmanagementapi.repository.BillDetailRepository;
 import com.lhduc.restaurantmanagementapi.repository.BillRepository;
+import com.lhduc.restaurantmanagementapi.repository.MenuItemRepository;
 import com.lhduc.restaurantmanagementapi.service.BillService;
-import com.lhduc.restaurantmanagementapi.util.BillDetailRepositoryUtil;
-import com.lhduc.restaurantmanagementapi.util.BillRepositoryUtil;
-import com.lhduc.restaurantmanagementapi.util.MenuItemRepositoryUtil;
-import jakarta.transaction.Transactional;
+import com.lhduc.restaurantmanagementapi.util.RepositoryUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -33,14 +32,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.BILL_DETAIL_NOT_FOUND;
+import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.BILL_NOT_FOUND;
+import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.MENU_ITEM_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public class BillServiceImpl implements BillService {
     private final BillRepository billRepository;
     private final BillDetailRepository billDetailRepository;
-    private final MenuItemRepositoryUtil menuItemRepositoryUtil;
-    private final BillRepositoryUtil billRepositoryUtil;
-    private final BillDetailRepositoryUtil billDetailRepositoryUtil;
+    private final MenuItemRepository menuItemRepository;
     private final BillMapper billMapper;
 
     @Override
@@ -54,7 +55,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public BillDto getBillById(int billId) {
-        Bill bill = billRepositoryUtil.findByIdOrThrow(billId);
+        Bill bill = this.findBillByIdOrThrow(billId);
         return billMapper.convertToDto(bill);
     }
 
@@ -64,7 +65,7 @@ public class BillServiceImpl implements BillService {
         List<BillDetail> billDetails = new ArrayList<>();
 
         for (BillDetailCreateRequest billDetailRequest : billRequest.getItems()) {
-            MenuItem menuItem = menuItemRepositoryUtil.findByIdOrThrow(billDetailRequest.getMenuItemId());
+            MenuItem menuItem = this.findMenuItemByIdOrThrow(billDetailRequest.getMenuItemId());
             BillDetail newBillDetail = this.generateBillDetail(bill, menuItem, billDetailRequest);
 
             billDetails.add(newBillDetail);
@@ -78,13 +79,13 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public void addMoreBillItems(int billId, List<BillDetailCreateRequest> requests) {
-        Bill bill = billRepositoryUtil.findByIdOrThrow(billId);
+        Bill bill = this.findBillByIdOrThrow(billId);
         this.validateEditableBillStatus(bill);
 
         List<BillDetail> billDetails = new ArrayList<>();
 
         for (BillDetailCreateRequest request : requests) {
-            MenuItem menuItem = menuItemRepositoryUtil.findByIdOrThrow(request.getMenuItemId());
+            MenuItem menuItem = this.findMenuItemByIdOrThrow(request.getMenuItemId());
             Optional<BillDetail> billDetailOptional = billDetailRepository.findById(new BillDetailPK(bill.getId(), menuItem.getId()));
 
             if (billDetailOptional.isPresent()) {
@@ -101,7 +102,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public void updateBill(int billId, BillUpdateRequest request) {
-        Bill bill = billRepositoryUtil.findByIdOrThrow(billId);
+        Bill bill = this.findBillByIdOrThrow(billId);
         this.validateEditableBillStatus(bill);
         bill.setPaymentStatus(request.getPaymentStatus());
 
@@ -110,13 +111,13 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public void updateBillItems(int billId, List<BillDetailUpdateRequest> requests) {
-        Bill bill = billRepositoryUtil.findByIdOrThrow(billId);
+        Bill bill = this.findBillByIdOrThrow(billId);
         this.validateEditableBillStatus(bill);
         List<BillDetail> billDetails = new ArrayList<>();
 
         for (BillDetailUpdateRequest request : requests) {
-            MenuItem menuItem = menuItemRepositoryUtil.findByIdOrThrow(request.getMenuItemId());
-            BillDetail billDetail = billDetailRepositoryUtil.findByIdOrThrow(new BillDetailPK(bill.getId(), menuItem.getId()));
+            MenuItem menuItem = this.findMenuItemByIdOrThrow(request.getMenuItemId());
+            BillDetail billDetail = this.findBillDetailByIdOrThrow(new BillDetailPK(bill.getId(), menuItem.getId()));
 
             billDetail.setQuantity(request.getQuantity());
             billDetail.setPricePerUnit(request.getPricePerUnit());
@@ -129,14 +130,14 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public void deleteBillById(int billId) {
-        Bill bill = billRepositoryUtil.findByIdOrThrow(billId);
+        Bill bill = this.findBillByIdOrThrow(billId);
         this.validateEditableBillStatus(bill);
         billRepository.deleteById(billId);
     }
 
     @Override
     public void deleteBillItem(int billId, int menuItemId) {
-        BillDetail billDetail = billDetailRepositoryUtil.findByIdOrThrow(new BillDetailPK(billId, menuItemId));
+        BillDetail billDetail = this.findBillDetailByIdOrThrow(new BillDetailPK(billId, menuItemId));
         billDetailRepository.delete(billDetail);
     }
 
@@ -182,5 +183,41 @@ public class BillServiceImpl implements BillService {
         if (!bill.getPaymentStatus().isEditable()) {
             throw new OperationForbiddenException("Unable to access the bill has been " + bill.getPaymentStatus().name().toLowerCase());
         }
+    }
+
+    /**
+     * Finds a {@code Bill} entity by its ID or throws a {@code NotFoundException}
+     * if the entity is not found.
+     *
+     * @param billId The ID of the {@code Bill} entity to be found.
+     * @return The found {@code Bill} entity.
+     * @throws NotFoundException If the {@code Bill} entity with the given ID is not found.
+     */
+    private Bill findBillByIdOrThrow(int billId) {
+        return RepositoryUtil.findEntityByIdOrThrow(billId, billRepository, BILL_NOT_FOUND);
+    }
+
+    /**
+     * Finds a {@code BillDetail} entity by its composite primary key ({@code BillDetailPK}) or
+     * throws a {@code NotFoundException} if the entity is not found.
+     *
+     * @param id The composite primary key of the {@code BillDetail} entity to be found.
+     * @return The found {@code BillDetail} entity.
+     * @throws NotFoundException If the {@code BillDetail} entity with the given composite primary key is not found.
+     */
+    private BillDetail findBillDetailByIdOrThrow(BillDetailPK id) {
+        return RepositoryUtil.findEntityByIdOrThrow(id, billDetailRepository, BILL_DETAIL_NOT_FOUND);
+    }
+
+    /**
+     * Finds a {@code MenuItem} entity by its ID or throws a {@code NotFoundException}
+     * if the entity is not found.
+     *
+     * @param menuItemId The ID of the {@code MenuItem} entity to be found.
+     * @return The found {@code MenuItem} entity.
+     * @throws NotFoundException If the {@code MenuItem} entity with the given ID is not found.
+     */
+    private MenuItem findMenuItemByIdOrThrow(int menuItemId) {
+        return RepositoryUtil.findEntityByIdOrThrow(menuItemId, menuItemRepository, MENU_ITEM_NOT_FOUND);
     }
 }

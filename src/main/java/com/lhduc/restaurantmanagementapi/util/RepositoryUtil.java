@@ -3,7 +3,7 @@ package com.lhduc.restaurantmanagementapi.util;
 import com.lhduc.restaurantmanagementapi.exception.NotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public class RepositoryUtil {
+public final class RepositoryUtil {
     private RepositoryUtil() {}
     
     /**
