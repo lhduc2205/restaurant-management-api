@@ -1,6 +1,10 @@
 logging:
+  file:
+    path: log
   level:
     root: info
+  pattern:
+    level: 'user:%X{user} %5p'
 spring:
   datasource:
     url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/restaurant-db

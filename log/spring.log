@@ -1,0 +1,31 @@
+2023-11-29T14:28:47.345+07:00 user:  INFO 15408 --- [main] c.l.r.RestaurantManagementApiApplication : Starting RestaurantManagementApiApplication using Java 17.0.8.1 with PID 15408 (D:\Huynh Duc\Springboot\restaurant-management-api\target\classes started by lhduc in D:\Huynh Duc\Springboot\restaurant-management-api)
+2023-11-29T14:28:47.346+07:00 user:  INFO 15408 --- [main] c.l.r.RestaurantManagementApiApplication : No active profile set, falling back to 1 default profile: "default"
+2023-11-29T14:28:47.711+07:00 user:  INFO 15408 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-11-29T14:28:47.761+07:00 user:  INFO 15408 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 45 ms. Found 3 JPA repository interfaces.
+2023-11-29T14:28:48.063+07:00 user:  INFO 15408 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-11-29T14:28:48.068+07:00 user:  INFO 15408 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-11-29T14:28:48.068+07:00 user:  INFO 15408 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2023-11-29T14:28:48.133+07:00 user:  INFO 15408 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-11-29T14:28:48.133+07:00 user:  INFO 15408 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 758 ms
+2023-11-29T14:28:48.217+07:00 user:  INFO 15408 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-11-29T14:28:48.248+07:00 user:  INFO 15408 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.13.Final
+2023-11-29T14:28:48.249+07:00 user:  INFO 15408 --- [main] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2023-11-29T14:28:48.413+07:00 user:  INFO 15408 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-11-29T14:28:48.427+07:00 user:  INFO 15408 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-11-29T14:28:48.538+07:00 user:  INFO 15408 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6734ff92
+2023-11-29T14:28:48.539+07:00 user:  INFO 15408 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-11-29T14:28:49.197+07:00 user:  INFO 15408 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2023-11-29T14:28:49.259+07:00 user:  INFO 15408 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-11-29T14:28:49.448+07:00 user:  WARN 15408 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-11-29T14:28:49.646+07:00 user:  INFO 15408 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-11-29T14:28:49.652+07:00 user:  INFO 15408 --- [main] c.l.r.RestaurantManagementApiApplication : Started RestaurantManagementApiApplication in 2.586 seconds (process running for 2.982)
+2023-11-29T14:28:55.130+07:00 user:  INFO 15408 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-11-29T14:28:55.131+07:00 user:  INFO 15408 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-11-29T14:28:55.131+07:00 user:  INFO 15408 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2023-11-29T14:28:55.277+07:00 user:  INFO 15408 --- [http-nio-8080-exec-2] c.l.r.controller.MenuItemController      : Get all menu items
+2023-11-29T14:28:56.663+07:00 user:  INFO 15408 --- [http-nio-8080-exec-6] c.l.r.controller.MenuItemController      : Get menu item with id = 4
+2023-11-29T14:28:58.686+07:00 user: ERROR 15408 --- [http-nio-8080-exec-10] c.l.r.e.h.DataRequestExceptionHandler    : Menu item not found
+2023-11-29T14:29:00.582+07:00 user:  INFO 15408 --- [http-nio-8080-exec-5] c.l.r.controller.BillController          : Get all bills
+2023-11-29T14:29:05.125+07:00 user: ERROR 15408 --- [http-nio-8080-exec-3] c.l.r.e.h.DataRequestExceptionHandler    : Unable to access the bill has been cancelled
+2023-11-29T14:29:08.782+07:00 user:  INFO 15408 --- [http-nio-8080-exec-7] c.l.r.controller.BillController          : Create bill with request = BillCreateRequest(items=[BillDetailCreateRequest(menuItemId=1, quantity=1)])
+2023-11-29T14:29:15.289+07:00 user:  INFO 15408 --- [http-nio-8080-exec-8] c.l.r.controller.BillController          : Add more bill items with bill id = 4 and request = [BillDetailCreateRequest(menuItemId=5, quantity=10000)]

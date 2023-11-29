@@ -138,6 +138,7 @@ public class BillServiceImpl implements BillService {
     @Override
     public void deleteBillItem(int billId, int menuItemId) {
         BillDetail billDetail = this.findBillDetailByIdOrThrow(new BillDetailPK(billId, menuItemId));
+        this.validateEditableBillStatus(billDetail.getBill());
         billDetailRepository.delete(billDetail);
     }
 
