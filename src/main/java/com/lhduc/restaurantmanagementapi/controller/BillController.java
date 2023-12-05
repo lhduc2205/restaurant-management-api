@@ -32,8 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.List;
 
-import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.GET_ALL_BILL_SUCCESSFULLY;
-import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.GET_BILL_BY_ID_SUCCESSFULLY;
 import static com.lhduc.restaurantmanagementapi.common.constant.UriConstant.BILLS_ENDPOINT;
 
 @RestController
@@ -62,7 +60,7 @@ public class BillController {
     ) {
         List<BillDto> bills = billService.getAllBill(billFilter, paginationRequest, sort);
         logger.info("Get all bills");
-        return ResponseEntity.ok(SuccessResponse.of(bills, GET_ALL_BILL_SUCCESSFULLY));
+        return ResponseEntity.ok(SuccessResponse.of(bills));
     }
 
 
@@ -77,7 +75,7 @@ public class BillController {
     public ResponseEntity<SuccessResponse<BillDto>> getById(@PathVariable("billId") int billId) {
         BillDto bill = billService.getBillById(billId);
         logger.info("Get bill with id = {}", billId);
-        return ResponseEntity.ok(SuccessResponse.of(bill, GET_BILL_BY_ID_SUCCESSFULLY));
+        return ResponseEntity.ok(SuccessResponse.of(bill));
     }
 
     /**

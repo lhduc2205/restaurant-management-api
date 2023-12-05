@@ -29,8 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.List;
 
-import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.GET_ALL_MENU_ITEM_SUCCESSFULLY;
-import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.GET_MENU_ITEM_BY_ID_SUCCESSFULLY;
 import static com.lhduc.restaurantmanagementapi.common.constant.UriConstant.MENU_ITEMS_ENDPOINT;
 
 @RestController
@@ -59,7 +57,7 @@ public class MenuItemController {
     ) {
         List<MenuItemDto> menuItems = menuItemService.getAll(menuItemFilter, paginationRequest, sort);
         logger.info("Get all menu items");
-        return ResponseEntity.ok(SuccessResponse.of(menuItems, GET_ALL_MENU_ITEM_SUCCESSFULLY));
+        return ResponseEntity.ok(SuccessResponse.of(menuItems));
     }
 
     /**
@@ -73,7 +71,7 @@ public class MenuItemController {
     public ResponseEntity<SuccessResponse<MenuItemDto>> getById(@PathVariable int menuItemId) {
         MenuItemDto menuItemDto = menuItemService.getById(menuItemId);
         logger.info("Get menu item with id = {}", menuItemId);
-        return ResponseEntity.ok(SuccessResponse.of(menuItemDto, GET_MENU_ITEM_BY_ID_SUCCESSFULLY));
+        return ResponseEntity.ok(SuccessResponse.of(menuItemDto));
     }
 
     /**
