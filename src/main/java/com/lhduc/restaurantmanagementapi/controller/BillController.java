@@ -12,6 +12,7 @@ import com.lhduc.restaurantmanagementapi.model.dto.request.sort.BillSortRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.response.BillDto;
 import com.lhduc.restaurantmanagementapi.model.dto.response.SuccessResponse;
 import com.lhduc.restaurantmanagementapi.service.BillService;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -55,9 +56,9 @@ public class BillController {
      */
     @GetMapping
     public ResponseEntity<SuccessResponse<List<BillDto>>> getAll(
-            @Valid BillFilter billFilter,
-            @Valid PaginationRequest paginationRequest,
-            @Valid BillSortRequest sort
+            @Nullable @Valid BillFilter billFilter,
+            @Nullable @Valid PaginationRequest paginationRequest,
+            @Nullable @Valid BillSortRequest sort
     ) {
         List<BillDto> bills = billService.getAllBill(billFilter, paginationRequest, sort);
         logger.info("Get all bills");

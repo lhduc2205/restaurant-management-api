@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class MenuItemControllerTest {
+class MenuItemControllerTestCase {
     @Autowired
     private MockMvc mvcMock;
 
@@ -48,6 +48,11 @@ class MenuItemControllerTest {
     private static final MenuItemDto MENU_ITEM_1 = new MenuItemDto(1, "Bun bo", 20000);
     private static final MenuItemDto MENU_ITEM_2 = new MenuItemDto(2, "Banh mi", 15000);
 
+    /**
+     * Tests the successful retrieval of all menu items.
+     *
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testGetAllMenuItem() throws Exception {
         final List<MenuItemDto> items = List.of(MENU_ITEM_1, MENU_ITEM_2);
@@ -58,6 +63,11 @@ class MenuItemControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Tests the successful retrieval of all menu items with descending sorting by ID.
+     *
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testGetAllMenuItemWithDescSorting() throws Exception {
         final List<MenuItemDto> items = List.of(MENU_ITEM_2, MENU_ITEM_1);
@@ -71,6 +81,11 @@ class MenuItemControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Tests the attempt to retrieve all menu items with an incorrect sorting field, expecting a Bad Request response.
+     *
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testGetAllMenuItemWithWrongSortingField() throws Exception {
         RequestBuilder requestBuilder = get(MENU_ITEMS_ENDPOINT)
@@ -83,6 +98,11 @@ class MenuItemControllerTest {
         verify(menuItemService, never()).getAll(any(), any(), any());
     }
 
+    /**
+     * Tests the successful retrieval of a menu item by its ID.
+     *
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testGetMenuItemById() throws Exception {
         when(menuItemService.getById(anyInt())).thenReturn(MENU_ITEM_1);
@@ -91,6 +111,11 @@ class MenuItemControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Tests the attempt to retrieve a non-existent menu item by its ID, expecting a Not Found response.
+     *
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testGetMenuItemById_ThrowNotFoundException() throws Exception {
         int notFoundId = 999;
@@ -100,6 +125,11 @@ class MenuItemControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    /**
+     * Tests the successful creation of a new menu item.
+     *
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testCreateMenuItem() throws Exception {
         MenuItemCreateRequest menuItemCreateRequest = new MenuItemCreateRequest();
@@ -117,6 +147,11 @@ class MenuItemControllerTest {
                 .andExpect(status().isCreated());
     }
 
+    /**
+     * Tests the successful update of a menu item.
+     *
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testUpdateMenuItem() throws Exception {
         MenuItemUpdateRequest menuItemUpdateRequest = new MenuItemUpdateRequest();
@@ -134,6 +169,11 @@ class MenuItemControllerTest {
         verify(menuItemService).update(MENU_ITEM_1.getId(), menuItemUpdateRequest);
     }
 
+    /**
+     * Tests the attempt to update a non-existent menu item, expecting a Not Found response.
+     *
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testUpdateMenuItem_ThrowNotFoundException() throws Exception {
         int notFoundId = 999;
@@ -154,14 +194,18 @@ class MenuItemControllerTest {
         verify(menuItemService).update(notFoundId, menuItemUpdateRequest);
     }
 
+    /**
+     * Tests the successful deletion of an existent menu item with no bill details.
+     *
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
-    void testDeleteMenuItem_ThrowsOperationForbiddenException() throws Exception {
-        doThrow(OperationForbiddenException.class).when(menuItemService).deleteById(anyInt());
+    void testDeleteMenuItemWithNoBillDetails() throws Exception {
         RequestBuilder requestBuilder = delete(MENU_ITEMS_ENDPOINT + "/{id}", 1);
 
         mvcMock.perform(requestBuilder)
                 .andDo(print())
-                .andExpect(status().isForbidden());
+                .andExpect(status().isNoContent());
 
         verify(menuItemService).deleteById(anyInt());
     }

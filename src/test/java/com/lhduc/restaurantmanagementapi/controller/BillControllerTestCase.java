@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class BillControllerTest {
+class BillControllerTestCase {
     @Autowired
     private MockMvc mockMvc;
 
@@ -52,6 +52,10 @@ class BillControllerTest {
     ));
     private static final BillDto BILL_2 = new BillDto(2, new ArrayList<>());
 
+    /**
+     * Tests the retrieval of all bills.
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testGetAllBill() throws Exception {
         when(billService.getAllBill(any(), any(), any())).thenReturn(Arrays.asList(BILL_1, BILL_2));
@@ -60,6 +64,10 @@ class BillControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Tests the retrieval of all bills with descending sorting by ID.
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testGetAllBillWithDescSorting() throws Exception {
         when(billService.getAllBill(any(), any(), any())).thenReturn(Arrays.asList(BILL_2, BILL_1));
@@ -70,6 +78,10 @@ class BillControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Tests the retrieval of all bills with an incorrect sorting field.
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testGetAllBillWithWrongSortingField() throws Exception {
         RequestBuilder requestBuilder = get(BILLS_ENDPOINT)
@@ -80,6 +92,10 @@ class BillControllerTest {
         verify(billService, never()).getAllBill(any(), any(), any());
     }
 
+    /**
+     * Tests the retrieval of a bill by ID.
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testGetById() throws Exception {
         when(billService.getBillById(BILL_1.getId())).thenReturn(BILL_1);
@@ -89,6 +105,10 @@ class BillControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Tests the creation of a new bill.
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testCreateBill() throws Exception {
         BillCreateRequest billCreateRequest = new BillCreateRequest();
@@ -101,6 +121,10 @@ class BillControllerTest {
                 .andExpect(status().isCreated());
     }
 
+    /**
+     * Tests the addition of more bill items.
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testAddMoreBillItems() throws Exception {
         AddMoreItemToBillRequest addMoreItemToBillRequest = new AddMoreItemToBillRequest();
@@ -113,6 +137,10 @@ class BillControllerTest {
         verify(billService).addMoreBillItems(BILL_1.getId(), addMoreItemToBillRequest.getItems());
     }
 
+    /**
+     * Tests the update of the bill status.
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testUpdateBillStatus() throws Exception {
         BillUpdateRequest billUpdateRequest = new BillUpdateRequest();
@@ -126,6 +154,10 @@ class BillControllerTest {
         verify(billService).updateBill(BILL_1.getId(), billUpdateRequest);
     }
 
+    /**
+     * Tests the update of the bill status with an empty payment, expecting an exception.
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testUpdateBillStatusWithEmptyPayment_throwException() throws Exception {
         BillUpdateRequest billUpdateRequest = new BillUpdateRequest();
@@ -137,6 +169,10 @@ class BillControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Tests the update of bill items, expecting an exception.
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testUpdateBillItems() throws Exception {
         BillUpdateRequest billUpdateRequest = new BillUpdateRequest();
@@ -148,6 +184,10 @@ class BillControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Tests the deletion of a bill.
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testDeleteBill() throws Exception {
         RequestBuilder requestBuilder = delete(BILLS_ENDPOINT + "/{billId}", BILL_1.getId());
@@ -157,6 +197,10 @@ class BillControllerTest {
         verify(billService).deleteBillById(BILL_1.getId());
     }
 
+    /**
+     * Tests the deletion of a bill with a paid status, expecting an exception.
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testDeleteBillWithPaidStatus_throwException() throws Exception {
         doThrow(OperationForbiddenException.class).when(billService).deleteBillById(BILL_1.getId());
@@ -166,6 +210,10 @@ class BillControllerTest {
                 .andExpect(status().isForbidden());
     }
 
+    /**
+     * Tests the deletion of a bill item.
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testDeleteBillItem() throws Exception {
         RequestBuilder requestBuilder = delete(BILLS_ENDPOINT + "/{billId}/items/{itemId}", BILL_1.getId(), 1);
@@ -175,6 +223,10 @@ class BillControllerTest {
         verify(billService).deleteBillItem(BILL_1.getId(), 1);
     }
 
+    /**
+     * Tests the deletion of a bill item with a paid status, expecting an exception.
+     * @throws Exception if an error occurs during the test.
+     */
     @Test
     void testDeleteBillItemWithPaidStatus_throwException() throws Exception {
         doThrow(OperationForbiddenException.class).when(billService).deleteBillItem(BILL_1.getId(), 1);

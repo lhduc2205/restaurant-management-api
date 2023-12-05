@@ -9,8 +9,12 @@ import com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemUpda
 import com.lhduc.restaurantmanagementapi.model.dto.request.sort.MenuItemSortRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.request.sort.SortRequest;
 import com.lhduc.restaurantmanagementapi.model.dto.response.MenuItemDto;
+import com.lhduc.restaurantmanagementapi.model.entity.BillDetail;
+import com.lhduc.restaurantmanagementapi.model.entity.BillDetailPK;
+import com.lhduc.restaurantmanagementapi.model.entity.MenuItem;
 import com.lhduc.restaurantmanagementapi.repository.MenuItemRepository;
 import com.lhduc.restaurantmanagementapi.service.MenuItemService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -18,17 +22,26 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Rollback(value = false)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class MenuItemServiceImplTest {
+class MenuItemServiceImplTestCase {
     @Autowired
     private MenuItemService menuItemService;
 
@@ -41,9 +54,14 @@ class MenuItemServiceImplTest {
 
     private static final int[] ITEM_IDS = new int[2];
 
+    /**
+     * Test case to create menu items and verify their existence in the repository.
+     *
+     * @see MenuItemService#create(MenuItemCreateRequest)
+     */
     @Test
     @Order(1)
-    void createMenuItem() {
+    void testCreateMenuItem() {
         for (int i = 0; i < 2; i++) {
             MenuItemCreateRequest menuItemCreateRequest = new MenuItemCreateRequest();
             menuItemCreateRequest.setName(ITEM_NAMES[i]);
@@ -59,6 +77,11 @@ class MenuItemServiceImplTest {
 
     }
 
+    /**
+     * Test case to retrieve all menu items and ensure at least two items are present.
+     *
+     * @see MenuItemService#getAll(MenuItemFilter, PaginationRequest, SortRequest)
+     */
     @Test
     @Order(2)
     void testGetAllMenuItem() {
@@ -66,6 +89,11 @@ class MenuItemServiceImplTest {
         assertTrue(menuItemDto.size() >= 2);
     }
 
+    /**
+     * Test case to retrieve menu items with pagination and verify the expected number of items per page.
+     *
+     * @see MenuItemService#getAll(MenuItemFilter, PaginationRequest, SortRequest)
+     */
     @Test
     @Order(3)
     void testGetAllMenuItemWithPagination() {
@@ -83,6 +111,11 @@ class MenuItemServiceImplTest {
         assertEquals(1, menuItemDto.size());
     }
 
+    /**
+     * Test case to retrieve all menu items with descending sorting by ID and ensure proper sorting.
+     *
+     * @see MenuItemService#getAll(MenuItemFilter, PaginationRequest, SortRequest)
+     */
     @Test
     @Order(4)
     void testGetAllMenuItemWithDescSorting() {
@@ -94,6 +127,11 @@ class MenuItemServiceImplTest {
         assertTrue(menuItemDto.get(0).getId() > menuItemDto.get(1).getId());
     }
 
+    /**
+     * Test case to retrieve menu items with filtering and verify the expected results.
+     *
+     * @see MenuItemService#getAll(MenuItemFilter, PaginationRequest, SortRequest)
+     */
     @Test
     @Order(5)
     void testGetAllMenuItemWithFiltering() {
@@ -109,6 +147,11 @@ class MenuItemServiceImplTest {
         assertEquals(0, menuItemDto.size());
     }
 
+    /**
+     * Test case to retrieve a specific menu item by its ID and ensure it is found.
+     *
+     * @see MenuItemService#getById(int)
+     */
     @Test
     @Order(6)
     void testGetMenuItemById() {
@@ -117,12 +160,22 @@ class MenuItemServiceImplTest {
         assertEquals(1, menuItemDto.getId());
     }
 
+    /**
+     * Test case to attempt to retrieve a non-existent menu item by its ID, expecting a NotFoundException.
+     *
+     * @see MenuItemService#getById(int)
+     */
     @Test
     @Order(6)
     void testGetMenuItemById_throwNotFoundException() {
         assertThrows(NotFoundException.class, () -> menuItemService.getById(999));
     }
 
+    /**
+     * Test case to update a menu item and verify the changes.
+     *
+     * @see MenuItemService#update(int, MenuItemUpdateRequest)
+     */
     @Test
     @Order(8)
     void testUpdateMenuItem() {
@@ -140,6 +193,11 @@ class MenuItemServiceImplTest {
         assertEquals(newItemPrice, menuItemDto.getPrice());
     }
 
+    /**
+     * Test case to attempt to update a non-existent menu item, expecting a NotFoundException.
+     *
+     * @see MenuItemService#update(int, MenuItemUpdateRequest)
+     */
     @Test
     @Order(9)
     void testUpdateMenuItem_throwNotFoundException() {
@@ -153,9 +211,25 @@ class MenuItemServiceImplTest {
         assertThrows(NotFoundException.class, () -> menuItemService.update(menuItemIdToUpdate, menuItemUpdateRequest));
     }
 
+    /**
+     * Test case to delete a menu item.
+     *
+     * @see MenuItemService#deleteById(int)
+     */
     @Test
+    @Transactional
     @Order(10)
-    void deleteMenuItemById_throwOperationForbiddenException() {
-        assertThrows(OperationForbiddenException.class, () -> menuItemService.deleteById(1));
+    void testDeleteByIdMenuItemWithNoBillDetails() {
+        List<MenuItem> menuItems = menuItemRepository.findAll();
+
+        Optional<MenuItem> menuItem = menuItems.stream().filter(i -> i.getBillDetail().isEmpty()).findFirst();
+
+        if (menuItem.isEmpty()) {
+            return;
+        }
+
+        assertDoesNotThrow(() -> menuItemService.deleteById(menuItem.get().getId()));
+
+        assertTrue(menuItemRepository.findById(menuItem.get().getId()).isEmpty());
     }
 }

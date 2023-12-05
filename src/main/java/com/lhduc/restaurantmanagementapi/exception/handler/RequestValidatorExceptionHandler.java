@@ -25,16 +25,9 @@ public class RequestValidatorExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException exception) {
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(FAILED);
+        errorResponse.setErrorMessage(exception.getBindingResult().getFieldErrors().get(0).getDefaultMessage());
+
         logger.error(exception.getMessage());
-
-        exception.getBindingResult().getAllErrors().forEach(error -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-
-            errorResponse.setMessage("Invalid value");
-            errorResponse.addError(fieldName, errorMessage);
-        });
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }

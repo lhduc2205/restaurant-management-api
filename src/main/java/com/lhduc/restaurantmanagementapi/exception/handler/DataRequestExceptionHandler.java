@@ -27,7 +27,7 @@ public class DataRequestExceptionHandler {
     public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException exception) {
         logger.error(exception.getMessage());
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(exception.getMessage());
+        errorResponse.setErrorMessage(exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
@@ -59,7 +59,7 @@ public class DataRequestExceptionHandler {
     public ResponseEntity<ErrorResponse> handleOperationForbiddenException(OperationForbiddenException exception) {
         logger.error(exception.getMessage());
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(exception.getMessage());
+        errorResponse.setErrorMessage(exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
     }
@@ -81,9 +81,7 @@ public class DataRequestExceptionHandler {
      * @param exception     The InvalidFormatException to be handled.
      */
     private void handleInvalidEnum(ErrorResponse errorResponse, InvalidFormatException exception) {
-        String errorFieldName = exception.getPath().get(exception.getPath().size() - 1).getFieldName();
         String groupValue = Arrays.toString(exception.getTargetType().getEnumConstants());
-        errorResponse.setMessage("Invalid enum value: " + exception.getValue());
-        errorResponse.addError(errorFieldName, "The value must be one of: " + groupValue);
+        errorResponse.setErrorMessage("Invalid enum value: " + exception.getValue() + ". The value must be one of: " + groupValue);
     }
 }

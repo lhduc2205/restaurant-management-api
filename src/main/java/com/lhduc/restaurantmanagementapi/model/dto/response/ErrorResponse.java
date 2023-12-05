@@ -13,10 +13,5 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ErrorResponse {
-    private String message;
-    private Map<String, String> errors = new HashMap<>();
-
-    public void addError(String key, String value) {
-        errors.put(key, value);
-    }
+    private String errorMessage;
 }

@@ -9,6 +9,7 @@ import com.lhduc.restaurantmanagementapi.model.dto.request.sort.MenuItemSortRequ
 import com.lhduc.restaurantmanagementapi.model.dto.response.MenuItemDto;
 import com.lhduc.restaurantmanagementapi.model.dto.response.SuccessResponse;
 import com.lhduc.restaurantmanagementapi.service.MenuItemService;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -52,9 +53,9 @@ public class MenuItemController {
      */
     @GetMapping
     public ResponseEntity<SuccessResponse<List<MenuItemDto>>> getAll(
-            @Valid MenuItemFilter menuItemFilter,
-            @Valid PaginationRequest paginationRequest,
-            @Valid MenuItemSortRequest sort
+            @Nullable @Valid MenuItemFilter menuItemFilter,
+            @Nullable @Valid PaginationRequest paginationRequest,
+            @Nullable @Valid MenuItemSortRequest sort
     ) {
         List<MenuItemDto> menuItems = menuItemService.getAll(menuItemFilter, paginationRequest, sort);
         logger.info("Get all menu items");

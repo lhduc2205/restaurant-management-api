@@ -13,6 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.lhduc.restaurantmanagementapi.common.constant.DatabaseConstant.CREATED_AT_COLUMN_NAME;
@@ -45,5 +46,5 @@ public class MenuItem {
 
     @ToString.Exclude
     @OneToMany(mappedBy = MENU_ITEM_MAPPING)
-    private List<BillDetail> billDetail;
+    private List<BillDetail> billDetail = new ArrayList<>();
 }

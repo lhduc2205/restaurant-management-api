@@ -44,6 +44,14 @@ public class BillServiceImpl implements BillService {
     private final MenuItemRepository menuItemRepository;
     private final BillMapper billMapper;
 
+    /**
+     * Retrieves a paginated list of bills based on the provided filters, pagination, and sorting criteria.
+     *
+     * @param billFilter        The filter criteria for bills.
+     * @param paginationRequest The pagination details, including offset and limit.
+     * @param sortRequest       The sorting criteria for the results.
+     * @return A list of {@link BillDto} representing the paginated bills.
+     */
     @Override
     public List<BillDto> getAllBill(BillFilter billFilter, PaginationRequest paginationRequest, SortRequest sortRequest) {
         Pageable pageRequest = PageRequest.of(paginationRequest.getOffset(), paginationRequest.getLimit(), Sort.by(sortRequest.buildSortOrders()));
@@ -53,12 +61,25 @@ public class BillServiceImpl implements BillService {
         return billMapper.convertToDto(billPage.getContent());
     }
 
+    /**
+     * Retrieves a bill by its unique identifier.
+     *
+     * @param billId The unique identifier of the bill.
+     * @return The {@link BillDto} representing the retrieved bill.
+     * @throws NotFoundException if the bill with the given ID is not found.
+     */
     @Override
     public BillDto getBillById(int billId) {
         Bill bill = this.findBillByIdOrThrow(billId);
         return billMapper.convertToDto(bill);
     }
 
+    /**
+     * Creates a new bill based on the provided creation request.
+     *
+     * @param billRequest The request containing information to create a new bill.
+     * @return The {@link BillDto} representing the newly created bill.
+     */
     @Override
     public BillDto createBill(BillCreateRequest billRequest) {
         Bill bill = new Bill();
@@ -77,6 +98,12 @@ public class BillServiceImpl implements BillService {
         return billMapper.convertToDto(createdBill);
     }
 
+    /**
+     * Adds more bill items to an existing bill.
+     *
+     * @param billId   The unique identifier of the bill to which items will be added.
+     * @param requests A list of {@link BillDetailCreateRequest} representing the bill items to be added.
+     */
     @Override
     public void addMoreBillItems(int billId, List<BillDetailCreateRequest> requests) {
         Bill bill = this.findBillByIdOrThrow(billId);
@@ -100,6 +127,12 @@ public class BillServiceImpl implements BillService {
         billDetailRepository.saveAll(billDetails);
     }
 
+    /**
+     * Updates the payment status of an existing bill.
+     *
+     * @param billId  The unique identifier of the bill to be updated.
+     * @param request The request containing the updated payment status.
+     */
     @Override
     public void updateBill(int billId, BillUpdateRequest request) {
         Bill bill = this.findBillByIdOrThrow(billId);
@@ -109,6 +142,12 @@ public class BillServiceImpl implements BillService {
         billRepository.save(bill);
     }
 
+    /**
+     * Updates bill items of an existing bill.
+     *
+     * @param billId   The unique identifier of the bill whose items will be updated.
+     * @param requests A list of {@link BillDetailUpdateRequest} representing the updated bill items.
+     */
     @Override
     public void updateBillItems(int billId, List<BillDetailUpdateRequest> requests) {
         Bill bill = this.findBillByIdOrThrow(billId);
@@ -128,6 +167,13 @@ public class BillServiceImpl implements BillService {
         billDetailRepository.saveAll(billDetails);
     }
 
+    /**
+     * Deletes a bill by its unique identifier.
+     *
+     * @param billId The unique identifier of the bill to be deleted.
+     * @throws OperationForbiddenException if the bill is not in an editable status.
+     * @throws NotFoundException   if the bill with the given ID is not found.
+     */
     @Override
     public void deleteBillById(int billId) {
         Bill bill = this.findBillByIdOrThrow(billId);
@@ -135,6 +181,13 @@ public class BillServiceImpl implements BillService {
         billRepository.deleteById(billId);
     }
 
+    /**
+     * Deletes a bill item from an existing bill.
+     *
+     * @param billId     The unique identifier of the bill from which the item will be deleted.
+     * @param menuItemId The unique identifier of the menu item to be deleted from the bill.
+     * @throws OperationForbiddenException if the bill item cannot be deleted.
+     */
     @Override
     public void deleteBillItem(int billId, int menuItemId) {
         BillDetail billDetail = this.findBillDetailByIdOrThrow(new BillDetailPK(billId, menuItemId));

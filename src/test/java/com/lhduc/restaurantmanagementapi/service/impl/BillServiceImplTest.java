@@ -17,6 +17,7 @@ import com.lhduc.restaurantmanagementapi.model.entity.MenuItem;
 import com.lhduc.restaurantmanagementapi.repository.BillDetailRepository;
 import com.lhduc.restaurantmanagementapi.repository.BillRepository;
 import com.lhduc.restaurantmanagementapi.repository.MenuItemRepository;
+import com.lhduc.restaurantmanagementapi.service.BillService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -52,6 +53,9 @@ class BillServiceImplTest {
     @Autowired
     private BillDetailRepository billDetailRepository;
 
+    /**
+     * Setup method executed before all tests, creating two menu items.
+     */
     @BeforeAll
     public void setup() {
         MenuItem menuItem1 = new MenuItem();
@@ -65,6 +69,11 @@ class BillServiceImplTest {
         menuItemRepository.saveAll(Arrays.asList(menuItem1, menuItem2));
     }
 
+    /**
+     * Test case to create a bill with two items and verify the details and payment status.
+     *
+     * @see BillService#createBill(BillCreateRequest)
+     */
     @Test
     @Order(1)
     void testCreateBillWithTwoItems() {
@@ -86,6 +95,11 @@ class BillServiceImplTest {
         assertEquals(2, bill.getDetails().size());
     }
 
+    /**
+     * Test case to create an empty bill and verify the default payment status.
+     *
+     * @see BillService#createBill(BillCreateRequest)
+     */
     @Test
     @Order(2)
     void testCreateEmptyBill() {
@@ -96,6 +110,11 @@ class BillServiceImplTest {
         assertEquals(0, bill.getDetails().size());
     }
 
+    /**
+     * Test case to retrieve all bills and ensure there are two bills.
+     *
+     * @see BillService#getAllBill(BillFilter, PaginationRequest, SortRequest)
+     */
     @Test
     @Order(3)
     void testGetAllBill() {
@@ -103,6 +122,11 @@ class BillServiceImplTest {
         assertEquals(2, bills.size());
     }
 
+    /**
+     * Test case to retrieve bills with filtering by payment status and verify the expected results.
+     *
+     * @see BillService#getAllBill(BillFilter, PaginationRequest, SortRequest)
+     */
     @Test
     @Order(4)
     void testGetAllBillWithFiltering() {
@@ -119,6 +143,11 @@ class BillServiceImplTest {
         assertEquals(0, bills.size());
     }
 
+    /**
+     * Test case to retrieve bills with descending sorting by ID and ensure proper sorting.
+     *
+     * @see BillService#getAllBill(BillFilter, PaginationRequest, SortRequest)
+     */
     @Test
     @Order(5)
     void testGetAllBillWithDescSorting() {
@@ -132,6 +161,11 @@ class BillServiceImplTest {
         assertEquals(1, bills.get(1).getId());
     }
 
+    /**
+     * Test case to retrieve bills with pagination and verify the expected number of items per page.
+     *
+     * @see BillService#getAllBill(BillFilter, PaginationRequest, SortRequest)
+     */
     @Test
     @Order(6)
     void testGetAllBillWithPaginating() {
@@ -158,6 +192,11 @@ class BillServiceImplTest {
         assertEquals(2, bills.get(0).getId());
     }
 
+    /**
+     * Test case to retrieve a specific bill by its ID and ensure it is found.
+     *
+     * @see BillService#getBillById(int)
+     */
     @Test
     @Order(7)
     void testGetBillById() {
@@ -168,6 +207,11 @@ class BillServiceImplTest {
         assertEquals(billId, bill.getId());
     }
 
+    /**
+     * Test case to attempt to retrieve a non-existent bill by its ID, expecting a NotFoundException.
+     *
+     * @see BillService#getBillById(int)
+     */
     @Test
     @Order(8)
     void testGetBillById_throwNotFoundException() {
@@ -175,6 +219,11 @@ class BillServiceImplTest {
         assertThrows(NotFoundException.class, () -> billService.getBillById(notFoundId));
     }
 
+    /**
+     * Test case to add more bill items to an existing bill and verify their addition.
+     *
+     * @see BillService#addMoreBillItems(int, List)
+     */
     @Test
     @Order(9)
     void testAddMoreBillItems() {
@@ -193,6 +242,13 @@ class BillServiceImplTest {
         assertTrue(billDetailRepository.existsById(new BillDetailPK(billId, menuItemId)));
     }
 
+    /**
+     * Prepares a list of BillDetailCreateRequest with the given menuItemId and quantity.
+     *
+     * @param menuItemId The ID of the menu item for the BillDetailCreateRequest.
+     * @param quantity   The quantity of the menu item for the BillDetailCreateRequest.
+     * @return A list containing a single BillDetailCreateRequest with the specified menuItemId and quantity.
+     */
     List<BillDetailCreateRequest> prepareBillDetailCreateRequests(int menuItemId, int quantity) {
         List<BillDetailCreateRequest> billDetailCreateRequests = new ArrayList<>();
 
@@ -204,6 +260,11 @@ class BillServiceImplTest {
         return billDetailCreateRequests;
     }
 
+    /**
+     * Test case to attempt to add more bill items to non-existent bills, expecting NotFoundException.
+     *
+     * @see BillService#addMoreBillItems(int, List)
+     */
     @Test
     @Order(9)
     void testAddMoreBillItems_throwNotFoundException() {
@@ -221,6 +282,11 @@ class BillServiceImplTest {
 
     }
 
+    /**
+     * Test case to update the payment status of a bill and verify the changes.
+     *
+     * @see BillService#updateBill(int, BillUpdateRequest)
+     */
     @Test
     @Order(10)
     void updateBill() {
@@ -239,6 +305,11 @@ class BillServiceImplTest {
         assertEquals(statusToUpdate, billAfterUpdate.getPaymentStatus());
     }
 
+    /**
+     * Test case to attempt to update the payment status of a bill to an invalid status, expecting OperationForbiddenException.
+     *
+     * @see BillService#updateBill(int, BillUpdateRequest)
+     */
     @Test
     @Order(11)
     void updateBill_throwException() {
@@ -252,20 +323,5 @@ class BillServiceImplTest {
         billUpdateRequest.setPaymentStatus(statusToUpdate);
 
         assertThrows(OperationForbiddenException.class, () -> billService.updateBill(billId, billUpdateRequest));
-    }
-
-    @Test
-    @Order(11)
-    void updateBillItems() {
-
-    }
-
-    @Test
-    void deleteBillById() {
-
-    }
-
-    @Test
-    void deleteBillItem() {
     }
 }

@@ -18,4 +18,5 @@ public final class MessageConstant {
     public static final String QUANTITY_MUST_BE_AT_LEAST_1 = "Quantity must be at least 1";
     public static final String PRICE_MUST_BE_AT_LEAST_1 = "Price must be at least 1";
     public static final String MENU_ITEM_ID_CAN_NOT_BE_NULL = "Menu item id can not be null";
+    public static final String NAME_MUST_NOT_BE_BLANK = "Name must not be blank";
 }

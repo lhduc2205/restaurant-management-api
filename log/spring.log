@@ -1,31 +1,119 @@
-2023-11-29T14:28:47.345+07:00 user:  INFO 15408 --- [main] c.l.r.RestaurantManagementApiApplication : Starting RestaurantManagementApiApplication using Java 17.0.8.1 with PID 15408 (D:\Huynh Duc\Springboot\restaurant-management-api\target\classes started by lhduc in D:\Huynh Duc\Springboot\restaurant-management-api)
-2023-11-29T14:28:47.346+07:00 user:  INFO 15408 --- [main] c.l.r.RestaurantManagementApiApplication : No active profile set, falling back to 1 default profile: "default"
-2023-11-29T14:28:47.711+07:00 user:  INFO 15408 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2023-11-29T14:28:47.761+07:00 user:  INFO 15408 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 45 ms. Found 3 JPA repository interfaces.
-2023-11-29T14:28:48.063+07:00 user:  INFO 15408 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
-2023-11-29T14:28:48.068+07:00 user:  INFO 15408 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2023-11-29T14:28:48.068+07:00 user:  INFO 15408 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
-2023-11-29T14:28:48.133+07:00 user:  INFO 15408 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2023-11-29T14:28:48.133+07:00 user:  INFO 15408 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 758 ms
-2023-11-29T14:28:48.217+07:00 user:  INFO 15408 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2023-11-29T14:28:48.248+07:00 user:  INFO 15408 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.13.Final
-2023-11-29T14:28:48.249+07:00 user:  INFO 15408 --- [main] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
-2023-11-29T14:28:48.413+07:00 user:  INFO 15408 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2023-11-29T14:28:48.427+07:00 user:  INFO 15408 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2023-11-29T14:28:48.538+07:00 user:  INFO 15408 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6734ff92
-2023-11-29T14:28:48.539+07:00 user:  INFO 15408 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2023-11-29T14:28:49.197+07:00 user:  INFO 15408 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2023-11-29T14:28:49.259+07:00 user:  INFO 15408 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2023-11-29T14:28:49.448+07:00 user:  WARN 15408 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2023-11-29T14:28:49.646+07:00 user:  INFO 15408 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2023-11-29T14:28:49.652+07:00 user:  INFO 15408 --- [main] c.l.r.RestaurantManagementApiApplication : Started RestaurantManagementApiApplication in 2.586 seconds (process running for 2.982)
-2023-11-29T14:28:55.130+07:00 user:  INFO 15408 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2023-11-29T14:28:55.131+07:00 user:  INFO 15408 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2023-11-29T14:28:55.131+07:00 user:  INFO 15408 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
-2023-11-29T14:28:55.277+07:00 user:  INFO 15408 --- [http-nio-8080-exec-2] c.l.r.controller.MenuItemController      : Get all menu items
-2023-11-29T14:28:56.663+07:00 user:  INFO 15408 --- [http-nio-8080-exec-6] c.l.r.controller.MenuItemController      : Get menu item with id = 4
-2023-11-29T14:28:58.686+07:00 user: ERROR 15408 --- [http-nio-8080-exec-10] c.l.r.e.h.DataRequestExceptionHandler    : Menu item not found
-2023-11-29T14:29:00.582+07:00 user:  INFO 15408 --- [http-nio-8080-exec-5] c.l.r.controller.BillController          : Get all bills
-2023-11-29T14:29:05.125+07:00 user: ERROR 15408 --- [http-nio-8080-exec-3] c.l.r.e.h.DataRequestExceptionHandler    : Unable to access the bill has been cancelled
-2023-11-29T14:29:08.782+07:00 user:  INFO 15408 --- [http-nio-8080-exec-7] c.l.r.controller.BillController          : Create bill with request = BillCreateRequest(items=[BillDetailCreateRequest(menuItemId=1, quantity=1)])
-2023-11-29T14:29:15.289+07:00 user:  INFO 15408 --- [http-nio-8080-exec-8] c.l.r.controller.BillController          : Add more bill items with bill id = 4 and request = [BillDetailCreateRequest(menuItemId=5, quantity=10000)]
+2023-12-05T11:11:46.153+07:00 user:  INFO 21320 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-12-05T11:11:46.186+07:00 user:  INFO 21320 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-12-05T11:11:46.189+07:00 user:  INFO 21320 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-12-05T11:12:50.393+07:00 user:  INFO 23392 --- [main] c.l.r.RestaurantManagementApiApplication : Starting RestaurantManagementApiApplication using Java 17.0.8.1 with PID 23392 (D:\Huynh Duc\Springboot\restaurant-management-api\target\classes started by lhduc in D:\Huynh Duc\Springboot\restaurant-management-api)
+2023-12-05T11:12:50.394+07:00 user:  INFO 23392 --- [main] c.l.r.RestaurantManagementApiApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-05T11:12:50.800+07:00 user:  INFO 23392 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-12-05T11:12:50.846+07:00 user:  INFO 23392 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 41 ms. Found 3 JPA repository interfaces.
+2023-12-05T11:12:51.142+07:00 user:  INFO 23392 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-12-05T11:12:51.148+07:00 user:  INFO 23392 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-12-05T11:12:51.148+07:00 user:  INFO 23392 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2023-12-05T11:12:51.214+07:00 user:  INFO 23392 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-12-05T11:12:51.214+07:00 user:  INFO 23392 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 793 ms
+2023-12-05T11:12:51.301+07:00 user:  INFO 23392 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-12-05T11:12:51.332+07:00 user:  INFO 23392 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.13.Final
+2023-12-05T11:12:51.333+07:00 user:  INFO 23392 --- [main] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2023-12-05T11:12:51.511+07:00 user:  INFO 23392 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-12-05T11:12:51.527+07:00 user:  INFO 23392 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-12-05T11:12:51.644+07:00 user:  INFO 23392 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@be6d228
+2023-12-05T11:12:51.645+07:00 user:  INFO 23392 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-12-05T11:12:52.315+07:00 user:  INFO 23392 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2023-12-05T11:12:52.371+07:00 user:  INFO 23392 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-12-05T11:12:52.636+07:00 user:  WARN 23392 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-05T11:12:52.883+07:00 user:  INFO 23392 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-12-05T11:12:52.890+07:00 user:  INFO 23392 --- [main] c.l.r.RestaurantManagementApiApplication : Started RestaurantManagementApiApplication in 2.767 seconds (process running for 3.178)
+2023-12-05T11:12:56.547+07:00 user:  INFO 23392 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-12-05T11:12:56.547+07:00 user:  INFO 23392 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-12-05T11:12:56.548+07:00 user:  INFO 23392 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-12-05T11:12:56.712+07:00 user:  INFO 23392 --- [http-nio-8080-exec-2] c.l.r.controller.MenuItemController      : Get all menu items
+2023-12-05T11:12:59.996+07:00 user:  INFO 23392 --- [http-nio-8080-exec-4] c.l.r.controller.MenuItemController      : Get menu item with id = 2
+2023-12-05T11:13:02.266+07:00 user: ERROR 23392 --- [http-nio-8080-exec-3] c.l.r.e.h.DataRequestExceptionHandler    : Menu item not found
+2023-12-05T11:13:32.571+07:00 user: ERROR 23392 --- [http-nio-8080-exec-6] l.r.e.h.RequestValidatorExceptionHandler : Validation failed for argument [0] in public org.springframework.http.ResponseEntity<java.net.URI> com.lhduc.restaurantmanagementapi.controller.MenuItemController.create(com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemCreateRequest): [Field error in object 'menuItemCreateRequest' on field 'price': rejected value [-1.0]; codes [Min.menuItemCreateRequest.price,Min.price,Min.double,Min]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [menuItemCreateRequest.price,price]; arguments []; default message [price],1]; default message [Price must be at least 1]] 
+2023-12-05T11:14:04.480+07:00 user:  INFO 23392 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-12-05T11:14:04.481+07:00 user:  INFO 23392 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-12-05T11:14:04.483+07:00 user:  INFO 23392 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-12-05T11:14:07.670+07:00 user:  INFO 30612 --- [main] c.l.r.RestaurantManagementApiApplication : Starting RestaurantManagementApiApplication using Java 17.0.8.1 with PID 30612 (D:\Huynh Duc\Springboot\restaurant-management-api\target\classes started by lhduc in D:\Huynh Duc\Springboot\restaurant-management-api)
+2023-12-05T11:14:07.672+07:00 user:  INFO 30612 --- [main] c.l.r.RestaurantManagementApiApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-05T11:14:08.102+07:00 user:  INFO 30612 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-12-05T11:14:08.153+07:00 user:  INFO 30612 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 46 ms. Found 3 JPA repository interfaces.
+2023-12-05T11:14:08.442+07:00 user:  INFO 30612 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-12-05T11:14:08.446+07:00 user:  INFO 30612 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-12-05T11:14:08.447+07:00 user:  INFO 30612 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2023-12-05T11:14:08.508+07:00 user:  INFO 30612 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-12-05T11:14:08.508+07:00 user:  INFO 30612 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 807 ms
+2023-12-05T11:14:08.589+07:00 user:  INFO 30612 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-12-05T11:14:08.617+07:00 user:  INFO 30612 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.13.Final
+2023-12-05T11:14:08.618+07:00 user:  INFO 30612 --- [main] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2023-12-05T11:14:08.788+07:00 user:  INFO 30612 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-12-05T11:14:08.811+07:00 user:  INFO 30612 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-12-05T11:14:08.938+07:00 user:  INFO 30612 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@adafe19
+2023-12-05T11:14:08.939+07:00 user:  INFO 30612 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-12-05T11:14:09.622+07:00 user:  INFO 30612 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2023-12-05T11:14:09.675+07:00 user:  INFO 30612 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-12-05T11:14:09.953+07:00 user:  WARN 30612 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-05T11:14:10.219+07:00 user:  INFO 30612 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-12-05T11:14:10.225+07:00 user:  INFO 30612 --- [main] c.l.r.RestaurantManagementApiApplication : Started RestaurantManagementApiApplication in 2.866 seconds (process running for 3.279)
+2023-12-05T11:14:10.809+07:00 user:  INFO 30612 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-12-05T11:14:10.809+07:00 user:  INFO 30612 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-12-05T11:14:10.810+07:00 user:  INFO 30612 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-12-05T11:14:10.894+07:00 user: ERROR 30612 --- [http-nio-8080-exec-1] l.r.e.h.RequestValidatorExceptionHandler : Validation failed for argument [0] in public org.springframework.http.ResponseEntity<java.net.URI> com.lhduc.restaurantmanagementapi.controller.MenuItemController.create(com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemCreateRequest): [Field error in object 'menuItemCreateRequest' on field 'price': rejected value [-1.0]; codes [Min.menuItemCreateRequest.price,Min.price,Min.double,Min]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [menuItemCreateRequest.price,price]; arguments []; default message [price],1]; default message [Price must be at least 1]] 
+2023-12-05T11:15:03.432+07:00 user:  INFO 30612 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-12-05T11:15:03.433+07:00 user:  INFO 30612 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-12-05T11:15:03.435+07:00 user:  INFO 30612 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-12-05T11:15:06.642+07:00 user:  INFO 13216 --- [main] c.l.r.RestaurantManagementApiApplication : Starting RestaurantManagementApiApplication using Java 17.0.8.1 with PID 13216 (D:\Huynh Duc\Springboot\restaurant-management-api\target\classes started by lhduc in D:\Huynh Duc\Springboot\restaurant-management-api)
+2023-12-05T11:15:06.644+07:00 user:  INFO 13216 --- [main] c.l.r.RestaurantManagementApiApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-05T11:15:07.110+07:00 user:  INFO 13216 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-12-05T11:15:07.158+07:00 user:  INFO 13216 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 43 ms. Found 3 JPA repository interfaces.
+2023-12-05T11:15:07.451+07:00 user:  INFO 13216 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-12-05T11:15:07.457+07:00 user:  INFO 13216 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-12-05T11:15:07.457+07:00 user:  INFO 13216 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2023-12-05T11:15:07.524+07:00 user:  INFO 13216 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-12-05T11:15:07.525+07:00 user:  INFO 13216 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 847 ms
+2023-12-05T11:15:07.609+07:00 user:  INFO 13216 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-12-05T11:15:07.641+07:00 user:  INFO 13216 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.13.Final
+2023-12-05T11:15:07.642+07:00 user:  INFO 13216 --- [main] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2023-12-05T11:15:07.833+07:00 user:  INFO 13216 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-12-05T11:15:07.853+07:00 user:  INFO 13216 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-12-05T11:15:07.990+07:00 user:  INFO 13216 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@60a01cb
+2023-12-05T11:15:07.991+07:00 user:  INFO 13216 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-12-05T11:15:08.658+07:00 user:  INFO 13216 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2023-12-05T11:15:08.716+07:00 user:  INFO 13216 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-12-05T11:15:08.989+07:00 user:  WARN 13216 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-05T11:15:09.240+07:00 user:  INFO 13216 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-12-05T11:15:09.246+07:00 user:  INFO 13216 --- [main] c.l.r.RestaurantManagementApiApplication : Started RestaurantManagementApiApplication in 2.933 seconds (process running for 3.395)
+2023-12-05T11:15:11.986+07:00 user:  INFO 13216 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-12-05T11:15:11.986+07:00 user:  INFO 13216 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-12-05T11:15:11.987+07:00 user:  INFO 13216 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-12-05T11:17:35.253+07:00 user:  WARN 13216 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m27s158ms2µs900ns).
+2023-12-05T11:17:35.257+07:00 user: ERROR 13216 --- [http-nio-8080-exec-1] l.r.e.h.RequestValidatorExceptionHandler : Validation failed for argument [0] in public org.springframework.http.ResponseEntity<java.net.URI> com.lhduc.restaurantmanagementapi.controller.MenuItemController.create(com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemCreateRequest): [Field error in object 'menuItemCreateRequest' on field 'price': rejected value [-1.0]; codes [Min.menuItemCreateRequest.price,Min.price,Min.double,Min]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [menuItemCreateRequest.price,price]; arguments []; default message [price],1]; default message [Price must be at least 1]] 
+2023-12-05T11:17:35.326+07:00 user:  INFO 13216 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-12-05T11:17:35.327+07:00 user:  INFO 13216 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-12-05T11:17:35.329+07:00 user:  INFO 13216 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-12-05T11:17:38.654+07:00 user:  INFO 10808 --- [main] c.l.r.RestaurantManagementApiApplication : Starting RestaurantManagementApiApplication using Java 17.0.8.1 with PID 10808 (D:\Huynh Duc\Springboot\restaurant-management-api\target\classes started by lhduc in D:\Huynh Duc\Springboot\restaurant-management-api)
+2023-12-05T11:17:38.657+07:00 user:  INFO 10808 --- [main] c.l.r.RestaurantManagementApiApplication : No active profile set, falling back to 1 default profile: "default"
+2023-12-05T11:17:39.143+07:00 user:  INFO 10808 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-12-05T11:17:39.193+07:00 user:  INFO 10808 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 45 ms. Found 3 JPA repository interfaces.
+2023-12-05T11:17:39.477+07:00 user:  INFO 10808 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-12-05T11:17:39.482+07:00 user:  INFO 10808 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-12-05T11:17:39.482+07:00 user:  INFO 10808 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.15]
+2023-12-05T11:17:39.544+07:00 user:  INFO 10808 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-12-05T11:17:39.544+07:00 user:  INFO 10808 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 851 ms
+2023-12-05T11:17:39.632+07:00 user:  INFO 10808 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-12-05T11:17:39.664+07:00 user:  INFO 10808 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.13.Final
+2023-12-05T11:17:39.665+07:00 user:  INFO 10808 --- [main] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2023-12-05T11:17:39.842+07:00 user:  INFO 10808 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-12-05T11:17:39.864+07:00 user:  INFO 10808 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-12-05T11:17:40.109+07:00 user:  INFO 10808 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@8432469
+2023-12-05T11:17:40.110+07:00 user:  INFO 10808 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-12-05T11:17:40.787+07:00 user:  INFO 10808 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2023-12-05T11:17:40.849+07:00 user:  INFO 10808 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-12-05T11:17:41.112+07:00 user:  WARN 10808 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-12-05T11:17:41.376+07:00 user:  INFO 10808 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-12-05T11:17:41.383+07:00 user:  INFO 10808 --- [main] c.l.r.RestaurantManagementApiApplication : Started RestaurantManagementApiApplication in 3.067 seconds (process running for 3.544)
+2023-12-05T11:17:41.544+07:00 user:  INFO 10808 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-12-05T11:17:41.544+07:00 user:  INFO 10808 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-12-05T11:17:41.545+07:00 user:  INFO 10808 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2023-12-05T11:17:41.630+07:00 user: ERROR 10808 --- [http-nio-8080-exec-2] l.r.e.h.RequestValidatorExceptionHandler : Validation failed for argument [0] in public org.springframework.http.ResponseEntity<java.net.URI> com.lhduc.restaurantmanagementapi.controller.MenuItemController.create(com.lhduc.restaurantmanagementapi.model.dto.request.menuitem.MenuItemCreateRequest): [Field error in object 'menuItemCreateRequest' on field 'price': rejected value [-1.0]; codes [Min.menuItemCreateRequest.price,Min.price,Min.double,Min]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [menuItemCreateRequest.price,price]; arguments []; default message [price],1]; default message [Price must be at least 1]] 
+2023-12-05T11:19:00.193+07:00 user:  INFO 10808 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-12-05T11:19:00.194+07:00 user:  INFO 10808 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-12-05T11:19:00.196+07:00 user:  INFO 10808 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

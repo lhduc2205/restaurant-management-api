@@ -1,19 +1,15 @@
 package com.lhduc.restaurantmanagementapi.model.dto.request.sort;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
 public class SortRequest {
     private static final String SORT_FIELD_SEPARATOR = ",";
     private static final String DESCENDING_SIGN = "-";
 
-    List<SortableField> sortableFields = new ArrayList<>();
+    private final List<SortableField> sortableFields = new ArrayList<>();
 
     public void parseSortString(String sortString) {
         String[] sortFields = sortString.split(SORT_FIELD_SEPARATOR);

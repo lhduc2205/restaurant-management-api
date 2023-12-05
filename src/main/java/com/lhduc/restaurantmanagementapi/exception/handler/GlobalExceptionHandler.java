@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(RuntimeException exception) {
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(exception.getMessage());
+        errorResponse.setErrorMessage(exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
