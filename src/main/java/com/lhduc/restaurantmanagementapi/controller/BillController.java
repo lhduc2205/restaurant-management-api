@@ -16,8 +16,7 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,12 +33,12 @@ import java.util.List;
 
 import static com.lhduc.restaurantmanagementapi.common.constant.UriConstant.BILLS_ENDPOINT;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(BILLS_ENDPOINT)
 public class BillController {
     private final BillService billService;
-    private final Logger logger = LoggerFactory.getLogger(BillController.class);
 
     /**
      * Retrieves a list of bills based on the provided filtering, pagination, and sorting criteria.
@@ -59,7 +58,7 @@ public class BillController {
             @Nullable @Valid BillSortRequest sort
     ) {
         List<BillDto> bills = billService.getAllBill(billFilter, paginationRequest, sort);
-        logger.info("Get all bills");
+        log.info("Get all bills");
         return ResponseEntity.ok(SuccessResponse.of(bills));
     }
 
@@ -74,7 +73,7 @@ public class BillController {
     @GetMapping("{billId}")
     public ResponseEntity<SuccessResponse<BillDto>> getById(@PathVariable("billId") int billId) {
         BillDto bill = billService.getBillById(billId);
-        logger.info("Get bill with id = {}", billId);
+        log.info("Get bill with id = {}", billId);
         return ResponseEntity.ok(SuccessResponse.of(bill));
     }
 
@@ -89,7 +88,7 @@ public class BillController {
     @PostMapping
     public ResponseEntity<URI> createBill(@RequestBody @Valid BillCreateRequest billRequest) {
         final BillDto bill = billService.createBill(billRequest);
-        logger.info("Create bill with request = {}", billRequest);
+        log.info("Create bill with request = {}", billRequest);
         return ResponseEntity.created(URI.create(BILLS_ENDPOINT + "/" + bill.getId())).build();
     }
 
@@ -109,7 +108,7 @@ public class BillController {
             @RequestBody @Valid AddMoreItemToBillRequest billDetailsRequest
     ) {
         billService.addMoreBillItems(billId, billDetailsRequest.getItems());
-        logger.info("Add more bill items with bill id = {} and request = {}", billId, billDetailsRequest.getItems());
+        log.info("Add more bill items with bill id = {} and request = {}", billId, billDetailsRequest.getItems());
         return ResponseEntity.created(URI.create(BILLS_ENDPOINT + "/" + billId)).build();
     }
 
@@ -130,7 +129,7 @@ public class BillController {
             @RequestBody @Valid BillUpdateRequest billUpdateRequest
     ) {
         billService.updateBill(billId, billUpdateRequest);
-        logger.info("Update bill with bill id = {} and request = {}", billId, billUpdateRequest);
+        log.info("Update bill with bill id = {} and request = {}", billId, billUpdateRequest);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -150,7 +149,7 @@ public class BillController {
             @RequestBody @Valid UpdateBillItemRequest updateBillItemRequest
     ) {
         billService.updateBillItems(billId, updateBillItemRequest.getItems());
-        logger.info("Update bill items with bill id = {} and request = {}", billId, updateBillItemRequest.getItems());
+        log.info("Update bill items with bill id = {} and request = {}", billId, updateBillItemRequest.getItems());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -165,7 +164,7 @@ public class BillController {
     @DeleteMapping("{billId}")
     public ResponseEntity<Void> deleteBill(@PathVariable("billId") int billId) {
         billService.deleteBillById(billId);
-        logger.info("Delete bill with bill id = {}", billId);
+        log.info("Delete bill with bill id = {}", billId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -184,7 +183,7 @@ public class BillController {
             @PathVariable("menuItemId") int menuItemId
     ) {
         billService.deleteBillItem(billId, menuItemId);
-        logger.info("Delete bill item with bill id = {} and menu item id = {}", billId, menuItemId);
+        log.info("Delete bill item with bill id = {} and menu item id = {}", billId, menuItemId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

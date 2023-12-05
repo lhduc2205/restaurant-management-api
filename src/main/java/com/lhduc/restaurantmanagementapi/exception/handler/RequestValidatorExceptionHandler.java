@@ -1,20 +1,16 @@
 package com.lhduc.restaurantmanagementapi.exception.handler;
 
 import com.lhduc.restaurantmanagementapi.model.dto.response.ErrorResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static com.lhduc.restaurantmanagementapi.common.constant.MessageConstant.FAILED;
-
+@Slf4j
 @ControllerAdvice
 public class RequestValidatorExceptionHandler {
-    private final Logger logger = LoggerFactory.getLogger(RequestValidatorExceptionHandler.class);
 
     /**
      * Exception handler method to handle MethodArgumentNotValidException instances.
@@ -27,7 +23,7 @@ public class RequestValidatorExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setErrorMessage(exception.getBindingResult().getFieldErrors().get(0).getDefaultMessage());
 
-        logger.error(exception.getMessage());
+        log.error(exception.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
