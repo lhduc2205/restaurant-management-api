@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Rollback(value = false)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class BillServiceImplTest {
+class BillServiceImplTestCase {
     @Autowired
     private BillServiceImpl billService;
 
@@ -289,7 +289,7 @@ class BillServiceImplTest {
      */
     @Test
     @Order(10)
-    void updateBill() {
+    void testUpdateBill() {
         int billId = 1;
         PaymentStatus statusToUpdate = PaymentStatus.PAID;
 
@@ -312,7 +312,7 @@ class BillServiceImplTest {
      */
     @Test
     @Order(11)
-    void updateBill_throwException() {
+    void testUpdateBill_throwException() {
         int billId = 1;
         PaymentStatus statusToUpdate = PaymentStatus.CANCELLED;
 
